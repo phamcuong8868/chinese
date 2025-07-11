@@ -11,3 +11,7 @@
 - File:
 
 ## Pinyin (phiên âm)
+
+
+## CÁC TÌNH HUỐNG CỤ THỂ
+- 
