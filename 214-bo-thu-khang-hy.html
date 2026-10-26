@@ -46,9 +46,9 @@
 </head>
 <body>
 <main>  
-  <div id="result" aria-live="polite" style="height:60vh; overflow: scroll;"><div class="blank">Chọn ngẫu nhiên hoặc dùng các nút điều hướng để xem bộ thủ.</div></div>
+  <div id="result" aria-live="polite"><div class="blank">Chọn ngẫu nhiên hoặc dùng các nút điều hướng để xem bộ thủ.</div></div>
   
-  <nav class="media-controls" aria-label="Điều hướng bộ thủ">
+  <nav class="media-controls" style=" margin-top: 10px;" aria-label="Điều hướng bộ thủ">
     <button id="firstBtn" class="move-btn" type="button" aria-label="Về bộ đầu tiên" title="Về bộ đầu tiên">⏮</button>
     <button id="prevBtn" class="move-btn" type="button" aria-label="Bộ trước" title="Bộ trước">◀</button>
     <span id="position" aria-live="polite">— / 214</span>
@@ -388,8 +388,10 @@ function render(r) {
           <div class="number">BỘ THỦ ${r.id}/214 · ${r.strokes} NÉT</div>                  
         </div>
       </div>
-      <table class="summary"><tbody>${rows.map(([label, value]) => `<tr><th scope="row">${label}</th><td>${value}</td></tr>`).join("")}</tbody></table>
-      ${extra}
+      <div style="height:50vh; overflow: scroll;">
+        <table class="summary"><tbody>${rows.map(([label, value]) => `<tr><th scope="row">${label}</th><td>${value}</td></tr>`).join("")}</tbody></table>
+        ${extra}
+      </div>
     </article>`;
   document.getElementById("position").textContent = `${r.id} / ${radicals.length}`;
   document.getElementById("firstBtn").disabled = currentIndex === 0;
