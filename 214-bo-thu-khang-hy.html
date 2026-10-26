@@ -13,7 +13,7 @@
   .subtitle { color:var(--muted); margin:0 0 22px; }
   button { border:0; border-radius:12px; padding:13px 20px; font:inherit; font-weight:700; background:var(--accent); color:white; cursor:pointer; }
   button:active { transform:scale(.98); }
-  .actions { display:flex; gap:10px; flex-wrap:wrap; align-items:center; margin:18px 0 10px; }
+  .actions { display:flex; gap:10px; flex-wrap:wrap; align-items:center; justify-content: center; margin:18px 0 10px; }
   .media-controls {display:grid; gap:8px; grid-template-columns: repeat(5,1fr);}
   .media-controls button { flex:1 1 64px; padding:8px 6px;}
   .media-controls .move-btn { background:#e8eef5; color:#174a78; }
@@ -55,15 +55,16 @@
     <button id="nextBtn" class="move-btn" type="button" aria-label="Bộ tiếp theo" title="Bộ tiếp theo">▶</button>
     <button id="lastBtn" class="move-btn" type="button" aria-label="Đến bộ cuối cùng" title="Đến bộ cuối cùng">⏭</button>
   </nav>
+   
+  <center>
+    <span style="font-weight: bold; font-size: 20px;">214 bộ thủ Khang Hy</span><br>
+    <span style="font-weight:500">(dạng chữ Khải thư)</span>
+  </center>
+  
   <center>
     <div class="actions">
       <button id="randomBtn" type="button">🎲 Chọn bộ ngẫu nhiên</button>
     </div>
-  </center>
-  
-  <center>
-    <span style="font-weight: bold; font-size: 20px;">214 bộ thủ Khang Hy</span><br>
-    <span style="font-weight:500">(dạng chữ Khải thư)</span>
   </center>
   <p class="foot">Lưu ý về thuật ngữ: Khang Hy (康熙) là hệ thống 214 bộ thủ được dùng trong Từ điển Khang Hy; Khải thư (楷書) là kiểu chữ viết chuẩn hiện đại. “Bộ thủ Khang Hy” là tên hệ thống phân loại, không có nghĩa cả 214 bộ đều được sáng tạo vào thời Khang Hy.</p>
   <p class="foot">Nguồn tham khảo nền tảng: Unicode Standard, mục “Kangxi Radicals and CJK Radicals Supplement” — xác nhận khối Kangxi Radicals gồm 214 bộ và phân biệt dạng bộ thủ với chữ Hán tương ứng.</p>
