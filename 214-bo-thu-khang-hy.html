@@ -14,7 +14,7 @@
   button { border:0; border-radius:12px; padding:13px 20px; font:inherit; font-weight:700; background:var(--accent); color:white; cursor:pointer; }
   button:active { transform:scale(.98); }
   .actions { display:flex; gap:10px; flex-wrap:wrap; align-items:center; justify-content: center; margin:18px 0 10px; }
-  .media-controls {position:fixed; bottom:0px; left:0px; z-index:2; width: 100vh; box-sizing:border-box; background:white; padding:8px; display:grid; gap:8px; grid-template-columns: repeat(5,1fr);}
+  .media-controls {position:fixed; bottom:0px; left:0px; z-index:2; width: 100vw; box-sizing:border-box; background:white; padding:8px; display:grid; gap:8px; grid-template-columns: repeat(5,1fr);}
   .media-controls button { flex:1 1 64px; padding:8px 6px;}
   .media-controls .move-btn { background:#e8eef5; color:#174a78; }
   .media-controls button:disabled { opacity:.4; cursor:not-allowed; transform:none; }
@@ -48,10 +48,10 @@
 <main>  
   <div id="result" aria-live="polite"><div class="blank">Chọn ngẫu nhiên hoặc dùng các nút điều hướng để xem bộ thủ.</div></div>
   
-  <nav class="media-controls" style=" margin-top: 10px;" aria-label="Điều hướng bộ thủ">
+  <nav class="media-controls" aria-label="Điều hướng bộ thủ">
     <button id="firstBtn" class="move-btn" type="button" aria-label="Về bộ đầu tiên" title="Về bộ đầu tiên">⏮</button>
     <button id="prevBtn" class="move-btn" type="button" aria-label="Bộ trước" title="Bộ trước">◀</button>
-    <span id="randomBtn" aria-live="polite">🎲</span>
+    <span id="randomBtn" aria-live="polite" style="font-size:28px;">🎲</span>
     <button id="nextBtn" class="move-btn" type="button" aria-label="Bộ tiếp theo" title="Bộ tiếp theo">▶</button>
     <button id="lastBtn" class="move-btn" type="button" aria-label="Đến bộ cuối cùng" title="Đến bộ cuối cùng">⏭</button>
   </nav>
