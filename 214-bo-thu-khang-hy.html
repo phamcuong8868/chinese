@@ -5,7 +5,7 @@
 <meta name="viewport" content="width=device-width, initial-scale=1">
 <title>214 bộ thủ Khang Hy (dạng chữ Khải thư)</title>
 <style>
-  :root { color-scheme: light; --ink:#202124; --muted:#5f6368; --line:#dadce0; --accent:#1769aa; --paper:#fff; --soft:#f5f7fa; }
+  :root { color-scheme: light; --ink:#202124; --muted:#999; --line:#dadce0; --accent:#1769aa; --paper:#fff; --soft:#f5f7fa; }
   * { box-sizing:border-box; }
   body { margin:0; background:var(--paper); color:var(--ink); font:16px/1.55 system-ui,-apple-system,"Segoe UI",sans-serif; }
   main { width:min(850px,100%); margin:0 auto; padding:24px 18px 48px; }
@@ -46,8 +46,11 @@
 </head>
 <body>
 <main>
-  <h1>214 bộ thủ Khang Hy <span style="font-weight:500">(dạng chữ Khải thư)</span></h1>
-  <p class="subtitle">Bấm nút để chọn ngẫu nhiên một bộ thủ và xem hồ sơ học tập.</p>
+  <center><h1>214 bộ thủ Khang Hy</h1>
+    <span style="font-weight:500">(dạng chữ Khải thư)</span>
+  
+  
+  <div id="result" aria-live="polite"><div class="blank">Chọn ngẫu nhiên hoặc dùng các nút điều hướng để xem bộ thủ.</div></div>
   <div class="actions">
     <button id="randomBtn" type="button">🎲 Chọn bộ ngẫu nhiên</button>
   </div>
@@ -58,7 +61,6 @@
     <button id="nextBtn" class="move-btn" type="button" aria-label="Bộ tiếp theo" title="Bộ tiếp theo">▶</button>
     <button id="lastBtn" class="move-btn" type="button" aria-label="Đến bộ cuối cùng" title="Đến bộ cuối cùng">⏭</button>
   </nav>
-  <div id="result" aria-live="polite"><div class="blank">Chọn ngẫu nhiên hoặc dùng các nút điều hướng để xem bộ thủ.</div></div>
   <p class="foot">Lưu ý về thuật ngữ: Khang Hy (康熙) là hệ thống 214 bộ thủ được dùng trong Từ điển Khang Hy; Khải thư (楷書) là kiểu chữ viết chuẩn hiện đại. “Bộ thủ Khang Hy” là tên hệ thống phân loại, không có nghĩa cả 214 bộ đều được sáng tạo vào thời Khang Hy.</p>
   <p class="foot">Nguồn tham khảo nền tảng: Unicode Standard, mục “Kangxi Radicals and CJK Radicals Supplement” — xác nhận khối Kangxi Radicals gồm 214 bộ và phân biệt dạng bộ thủ với chữ Hán tương ứng.</p>
 </main>
