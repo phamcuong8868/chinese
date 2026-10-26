@@ -414,6 +414,7 @@ document.getElementById("firstBtn").addEventListener("click", () => showIndex(0)
 document.getElementById("prevBtn").addEventListener("click", () => showIndex(currentIndex < 0 ? 0 : currentIndex - 1));
 document.getElementById("nextBtn").addEventListener("click", () => showIndex(currentIndex < 0 ? 0 : currentIndex + 1));
 document.getElementById("lastBtn").addEventListener("click", () => showIndex(radicals.length - 1));
+  render(radicals[0]);
 </script>
 </body>
 </html>
