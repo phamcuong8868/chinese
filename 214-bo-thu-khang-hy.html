@@ -28,20 +28,21 @@
   h3 { margin:20px 0 6px; font-size:1.02rem; }
   p { margin:6px 0 10px; }
   .tag { display:inline-block; background:#edf3fa; color:#174a78; padding:3px 9px; border-radius:999px; font-size:.9rem; margin:2px 4px 2px 0; }
-  .summary { width:100%; border-collapse:collapse; margin-top:18px; }
-  .summary th,.summary td { padding:4px 10px; border-bottom:1px solid #eceff1; text-align:left; vertical-align:top; }
-  .summary th { width:42%; font-weight:650; color:#4b5563; }
-  .summary td { overflow-wrap:anywhere; }
-  .summary tr:last-child th,.summary tr:last-child td { border-bottom:0; }
-  .summary .radical-value { font-size:1.65rem; font-weight:650; }
-  .extra { margin-top:16px; padding:14px; border-radius:12px; background:var(--soft); }
-  .extra h3 { margin:0 0 6px; }
-  .examples { display:grid; grid-template-columns:repeat(auto-fit,minmax(120px,1fr)); gap:8px; margin-top:8px; }
-  .example { background:var(--soft); padding:10px; border-radius:10px; }
-  .example b { font-size:1.5rem; margin-right:6px; }
-  .note { background:#fff8e1; border-left:4px solid #e0a000; padding:12px 14px; border-radius:8px; margin-top:16px; font-size:.94rem; }
-  .foot { color:var(--muted); font-size:.88rem; margin-top:20px; }
-  .blank { color:var(--muted); padding:28px 4px; }
+    .detail__row {width:100%; padding:4px 10px; border-bottom:1px solid #eceff1; text-align:left;}
+    .summary { width:100%; border-collapse:collapse; margin-top:18px; }
+    .summary th,.summary td { padding:4px 10px; border-bottom:1px solid #eceff1; text-align:left; vertical-align:top; }
+    .summary th { width:42%; font-weight:650; color:#4b5563; }
+    .summary td { overflow-wrap:anywhere; }
+    .summary tr:last-child th,.summary tr:last-child td { border-bottom:0; }
+    .summary .radical-value { font-size:1.65rem; font-weight:650; }
+    .extra { margin-top:16px; padding:14px; border-radius:12px; background:var(--soft); }
+    .extra h3 { margin:0 0 6px; }
+    .examples { display:grid; grid-template-columns:repeat(auto-fit,minmax(120px,1fr)); gap:8px; margin-top:8px; }
+    .example { background:var(--soft); padding:10px; border-radius:10px; }
+    .example b { font-size:1.5rem; margin-right:6px; }
+    .note { background:#fff8e1; border-left:4px solid #e0a000; padding:12px 14px; border-radius:8px; margin-top:16px; font-size:.94rem; }
+    .foot { color:var(--muted); font-size:.88rem; margin-top:20px; }
+    .blank { color:var(--muted); padding:28px 4px; }
 </style>
 </head>
 <body>
@@ -385,7 +386,7 @@ function render(r) {
         </div>
       </div>
       <div style="height:50vh; overflow: scroll;margin-top:8px;">
-        <table class="summary"><tbody>${rows.map(([label, value]) => `<tr><th scope="row">${label}</th><td>${value}</td></tr>`).join("")}</tbody></table>
+        ${rows.map(([label, value]) => `<div class="detail__row"><th scope="row">${label}</th><td>${value}</td><div>`).join("")}
         ${extra}
       </div>
     </article>`;
@@ -412,3 +413,4 @@ function chooseRandom() {
 </script>
 </body>
 </html>
+<!-- <table class="summary"><tbody>${rows.map(([label, value]) => `<tr><th scope="row">${label}</th><td>${value}</td></tr>`).join("")}</tbody></table> -->
