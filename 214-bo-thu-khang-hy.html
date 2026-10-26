@@ -21,7 +21,7 @@
   #position { color:var(--muted); font-size:.92rem; min-width:82px; text-align:center; }
   #result { margin-top:18px; }
   .card { border:1px solid var(--line); border-radius:18px; padding:20px; }
-  .hero { display:flex; align-items:center; gap:18px; flex-wrap:wrap; padding-bottom:18px; border-bottom:1px solid var(--line); }
+  .hero { display:flex; flex-direction: column; align-items:center; gap:18px; border-bottom:1px solid var(--line); }
   .glyph { font-family:"Noto Serif CJK SC","Noto Serif CJK TC","Songti SC",serif; font-size:clamp(5rem,24vw,8rem); line-height:1.05; min-width:110px; text-align:center; }
   .number { color:var(--muted); font-size:.95rem; }
   h2 { margin:0 0 8px; font-size:1.25rem; }
@@ -46,14 +46,13 @@
 </head>
 <body>
 <main>
-  <center><h1>214 bộ thủ Khang Hy</h1>
+  <center>
+    <span style="font-weight: bold; font-size: 20px;">214 bộ thủ Khang Hy</span><br>
     <span style="font-weight:500">(dạng chữ Khải thư)</span>
+  </center>
   
+  <div id="result" aria-live="polite" style="height:75vh; overflow: scroll;"><div class="blank">Chọn ngẫu nhiên hoặc dùng các nút điều hướng để xem bộ thủ.</div></div>
   
-  <div id="result" aria-live="polite"><div class="blank">Chọn ngẫu nhiên hoặc dùng các nút điều hướng để xem bộ thủ.</div></div>
-  <div class="actions">
-    <button id="randomBtn" type="button">🎲 Chọn bộ ngẫu nhiên</button>
-  </div>
   <nav class="media-controls" aria-label="Điều hướng bộ thủ">
     <button id="firstBtn" class="move-btn" type="button" aria-label="Về bộ đầu tiên" title="Về bộ đầu tiên">⏮</button>
     <button id="prevBtn" class="move-btn" type="button" aria-label="Bộ trước" title="Bộ trước">◀</button>
@@ -61,6 +60,11 @@
     <button id="nextBtn" class="move-btn" type="button" aria-label="Bộ tiếp theo" title="Bộ tiếp theo">▶</button>
     <button id="lastBtn" class="move-btn" type="button" aria-label="Đến bộ cuối cùng" title="Đến bộ cuối cùng">⏭</button>
   </nav>
+
+  <div class="actions">
+    <button id="randomBtn" type="button">🎲 Chọn bộ ngẫu nhiên</button>
+  </div>
+    
   <p class="foot">Lưu ý về thuật ngữ: Khang Hy (康熙) là hệ thống 214 bộ thủ được dùng trong Từ điển Khang Hy; Khải thư (楷書) là kiểu chữ viết chuẩn hiện đại. “Bộ thủ Khang Hy” là tên hệ thống phân loại, không có nghĩa cả 214 bộ đều được sáng tạo vào thời Khang Hy.</p>
   <p class="foot">Nguồn tham khảo nền tảng: Unicode Standard, mục “Kangxi Radicals and CJK Radicals Supplement” — xác nhận khối Kangxi Radicals gồm 214 bộ và phân biệt dạng bộ thủ với chữ Hán tương ứng.</p>
 </main>
@@ -354,7 +358,7 @@ function render(r) {
   const d = details[r.char] || {};
   const examplesList = d.examples || exactExamples[r.char] || [];
   const examplesText = examplesList.map(x => `${x[0]} (${x[1]}): ${x[2]}`).join("; ");
-  const variant = d.variant || `Thường giữ dạng ${r.char}; hình thức hoặc tỷ lệ có thể thay đổi theo vị trí trong chữ ghép.`;
+  const variant = d.variant || `Thường giữ dạng ${r.char}; <br><span style="color: #666;">(Hình thức hoặc tỷ lệ có thể thay đổi theo vị trí trong chữ ghép)</span>`;
   const pict = d.pict || r.meaning;
   const historyAndExamples = [d.history || "", examplesText ? `Ví dụ: ${examplesText}.` : ""].filter(Boolean).join(" ") || `Gợi nhớ theo nghĩa “${r.meaning}”.`;
   const extra = d.role ? `<section class="extra"><h3>Ghi chú mở rộng</h3><p>${escapeHTML(d.role)}</p></section>` : "";
@@ -371,11 +375,17 @@ function render(r) {
   document.getElementById("result").innerHTML = `
     <article class="card">
       <div class="hero">
-        <div class="glyph" lang="zh">${escapeHTML(r.char)}</div>
+        <div style="display: flex; flex-direction: row;">
+          <div>
+            <div class="glyph" lang="zh">${escapeHTML(r.char)}</div>            
+          </div>
+          <div>
+            <span class="tag">Pinyin: ${escapeHTML(r.pinyin)}</span>
+            <h2>${escapeHTML(r.hanviet)} — ${escapeHTML(r.meaning)}</h2>  
+          </div>
+        </div>
         <div>
-          <div class="number">BỘ THỦ ${r.id}/214 · ${r.strokes} NÉT</div>
-          <h2>${escapeHTML(r.hanviet)} — ${escapeHTML(r.meaning)}</h2>
-          <span class="tag">Pinyin: ${escapeHTML(r.pinyin)}</span>
+          <div class="number">BỘ THỦ ${r.id}/214 · ${r.strokes} NÉT</div>                  
         </div>
       </div>
       <table class="summary"><tbody>${rows.map(([label, value]) => `<tr><th scope="row">${label}</th><td>${value}</td></tr>`).join("")}</tbody></table>
