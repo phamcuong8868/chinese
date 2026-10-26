@@ -8,13 +8,13 @@
   :root { color-scheme: light; --ink:#202124; --muted:#999; --line:#dadce0; --accent:#1769aa; --paper:#fff; --soft:#f5f7fa; }
   * { box-sizing:border-box; }
   body { margin:0; background:var(--paper); color:var(--ink); font:16px/1.55 system-ui,-apple-system,"Segoe UI",sans-serif; }
-  main { width:min(850px,100%); margin:0 auto; padding:4px 12px 48px 12px; }
+  main { width:min(850px,100%); margin:0 auto; padding:4px 12px 100px 12px; }
   h1 { font-size:clamp(1.45rem,5vw,2rem); line-height:1.25; margin:0 0 8px; }
   .subtitle { color:var(--muted); margin:0 0 22px; }
   button { border:0; border-radius:12px; padding:13px 20px; font:inherit; font-weight:700; background:var(--accent); color:white; cursor:pointer; }
   button:active { transform:scale(.98); }
   .actions { display:flex; gap:10px; flex-wrap:wrap; align-items:center; justify-content: center; margin:18px 0 10px; }
-  .media-controls {display:grid; gap:8px; grid-template-columns: repeat(5,1fr);}
+  .media-controls {position:fixed; bottom:0px; left:0px; display:grid; gap:8px; grid-template-columns: repeat(5,1fr);}
   .media-controls button { flex:1 1 64px; padding:8px 6px;}
   .media-controls .move-btn { background:#e8eef5; color:#174a78; }
   .media-controls button:disabled { opacity:.4; cursor:not-allowed; transform:none; }
@@ -51,7 +51,7 @@
   <nav class="media-controls" style=" margin-top: 10px;" aria-label="Điều hướng bộ thủ">
     <button id="firstBtn" class="move-btn" type="button" aria-label="Về bộ đầu tiên" title="Về bộ đầu tiên">⏮</button>
     <button id="prevBtn" class="move-btn" type="button" aria-label="Bộ trước" title="Bộ trước">◀</button>
-    <span id="position" aria-live="polite">— / 214</span>
+    <span id="randomBtn" aria-live="polite">🎲</span>
     <button id="nextBtn" class="move-btn" type="button" aria-label="Bộ tiếp theo" title="Bộ tiếp theo">▶</button>
     <button id="lastBtn" class="move-btn" type="button" aria-label="Đến bộ cuối cùng" title="Đến bộ cuối cùng">⏭</button>
   </nav>
@@ -59,13 +59,8 @@
   <center>
     <span style="font-weight: bold; font-size: 20px;">214 bộ thủ Khang Hy</span><br>
     <span style="font-weight:500">(dạng chữ Khải thư)</span>
-  </center>
-  
-  <center>
-    <div class="actions">
-      <button id="randomBtn" type="button">🎲 Chọn bộ ngẫu nhiên</button>
-    </div>
-  </center>
+  </center>  
+      
   <p class="foot">Lưu ý về thuật ngữ: Khang Hy (康熙) là hệ thống 214 bộ thủ được dùng trong Từ điển Khang Hy; Khải thư (楷書) là kiểu chữ viết chuẩn hiện đại. “Bộ thủ Khang Hy” là tên hệ thống phân loại, không có nghĩa cả 214 bộ đều được sáng tạo vào thời Khang Hy.</p>
   <p class="foot">Nguồn tham khảo nền tảng: Unicode Standard, mục “Kangxi Radicals and CJK Radicals Supplement” — xác nhận khối Kangxi Radicals gồm 214 bộ và phân biệt dạng bộ thủ với chữ Hán tương ứng.</p>
 </main>
@@ -394,7 +389,6 @@ function render(r) {
         ${extra}
       </div>
     </article>`;
-  document.getElementById("position").textContent = `${r.id} / ${radicals.length}`;
   document.getElementById("firstBtn").disabled = currentIndex === 0;
   document.getElementById("prevBtn").disabled = currentIndex === 0;
   document.getElementById("nextBtn").disabled = currentIndex === radicals.length - 1;
