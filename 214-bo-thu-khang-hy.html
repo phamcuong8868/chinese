@@ -28,7 +28,7 @@
   h3 { margin:20px 0 6px; font-size:1.02rem; }
   p { margin:6px 0 10px; }
   .tag { display:inline-block; background:#edf3fa; color:#174a78; padding:3px 9px; border-radius:999px; font-size:.9rem; margin:2px 4px 2px 0; }
-    .detail__row {display:flex; flex-wrap:wrap; width:100%; padding:4px 10px; border-bottom:1px solid #eceff1; text-align:left;}
+    .detail__row {display:flex; flex-wrap:wrap; gap:12px; width:100%; padding:4px 10px; border-bottom:1px solid #eceff1; text-align:left;}
     .summary { width:100%; border-collapse:collapse; margin-top:18px; }
     .summary th,.summary td { padding:4px 10px; border-bottom:1px solid #eceff1; text-align:left; vertical-align:top; }
     .summary th { width:42%; font-weight:650; color:#4b5563; }
@@ -385,7 +385,7 @@ function render(r) {
           <div class="number">BỘ THỦ ${r.id}/214 · ${r.strokes} NÉT</div>                  
         </div>
       </div>
-      <div style="height:50vh; overflow: scroll;margin-top:8px;">
+      <div style="height:40vh; overflow: scroll;margin-top:8px;">
         ${rows.map(([label, value]) => `<div class="detail__row"><div style="font-weight:700; font-size:14px;">${label}:</div> <div>${value}</div> </div>`).join("")}
         ${extra}
       </div>
