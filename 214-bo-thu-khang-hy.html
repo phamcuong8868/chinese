@@ -386,7 +386,7 @@ function render(r) {
         </div>
       </div>
       <div style="height:50vh; overflow: scroll;margin-top:8px;">
-        ${rows.map(([label, value]) => `<div class="detail__row"><span style="font-weight: 600px; font-size:14px;">${label}</span><span>${value}</span><div>`).join("")}
+        ${rows.map(([label, value]) => `<div class="detail__row"><span style="font-weight: 600px; font-size:14px;">${label}</span> <span>${value}</span> </div>`).join("")}
         ${extra}
       </div>
     </article>`;
