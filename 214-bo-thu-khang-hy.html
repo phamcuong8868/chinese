@@ -389,7 +389,7 @@ function render(r) {
           <div class="number">BỘ THỦ ${r.id}/214 · ${r.strokes} NÉT</div>                  
         </div>
       </div>
-      <div style="height:50vh; overflow: scroll;">
+      <div style="height:50vh; overflow: scroll;margin-top:8px;">
         <table class="summary"><tbody>${rows.map(([label, value]) => `<tr><th scope="row">${label}</th><td>${value}</td></tr>`).join("")}</tbody></table>
         ${extra}
       </div>
@@ -409,12 +409,12 @@ function chooseRandom() {
   if (radicals.length > 1 && index === currentIndex) index = (index + 1) % radicals.length;
   showIndex(index);
 }
-document.getElementById("randomBtn").addEventListener("click", chooseRandom);
-document.getElementById("firstBtn").addEventListener("click", () => showIndex(0));
-document.getElementById("prevBtn").addEventListener("click", () => showIndex(currentIndex < 0 ? 0 : currentIndex - 1));
-document.getElementById("nextBtn").addEventListener("click", () => showIndex(currentIndex < 0 ? 0 : currentIndex + 1));
-document.getElementById("lastBtn").addEventListener("click", () => showIndex(radicals.length - 1));
-  render(radicals[0]);
+  document.getElementById("randomBtn").addEventListener("click", chooseRandom);
+  document.getElementById("firstBtn").addEventListener("click", () => showIndex(0));
+  document.getElementById("prevBtn").addEventListener("click", () => showIndex(currentIndex < 0 ? 0 : currentIndex - 1));
+  document.getElementById("nextBtn").addEventListener("click", () => showIndex(currentIndex < 0 ? 0 : currentIndex + 1));
+  document.getElementById("lastBtn").addEventListener("click", () => showIndex(radicals.length - 1));
+  chooseRandom();
 </script>
 </body>
 </html>
