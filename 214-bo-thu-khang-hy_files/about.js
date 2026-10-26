@@ -6,7 +6,7 @@ document.body.insertAdjacentHTML("beforeend", `
     </center>  
         
     <p class="foot">Lưu ý về thuật ngữ: Khang Hy (康熙) là hệ thống 214 bộ thủ được dùng trong Từ điển Khang Hy; Khải thư (楷書) là kiểu chữ viết chuẩn hiện đại. “Bộ thủ Khang Hy” là tên hệ thống phân loại, không có nghĩa cả 214 bộ đều được sáng tạo vào thời Khang Hy.</p>
-    <p class="foot">Nguồn tham khảo nền tảng: Unicode Standard, mục “Kangxi Radicals and CJK Radicals Supplement” — xác nhận khối Kangxi Radicals gồm 214 bộ và phân biệt dạng bộ thủ với chữ Hán tương ứng.</p>
+    
 
     <div class="menu__container">
         <div class="menu__button" onclick="document.getElementById('menuScreen').style.display='none';">
@@ -17,4 +17,5 @@ document.body.insertAdjacentHTML("beforeend", `
             Làm trắc nghiệm
         </div>
     </div>
+    <p class="foot">Nguồn tham khảo nền tảng: Unicode Standard, mục “Kangxi Radicals and CJK Radicals Supplement” — xác nhận khối Kangxi Radicals gồm 214 bộ và phân biệt dạng bộ thủ với chữ Hán tương ứng.</p>
 </div>`);
