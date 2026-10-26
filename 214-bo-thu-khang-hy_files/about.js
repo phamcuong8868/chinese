@@ -1,4 +1,4 @@
-document.body.innerHTML += `
+document.body.insertAdjacentHTML("beforeend", `
 <div id="menuScreen" class="menuScreen">
     <center>
         <span style="font-weight: bold; font-size: 20px;">214 bộ thủ Khang Hy</span><br>
@@ -17,4 +17,4 @@ document.body.innerHTML += `
             Làm trắc nghiệm
         </div>
     </div>
-</div>`;
+</div>`);
