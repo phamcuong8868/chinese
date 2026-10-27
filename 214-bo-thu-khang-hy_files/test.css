@@ -62,13 +62,14 @@ test
 }
 
 #test .test-btn {
-  padding: 11px 16px;
+  padding: 8px;
   border: 0;
-  border-radius: 8px;
+  border-radius: 12px;
   background: var(--test-primary);
   color: white;
-  font-size: 15px;
+  font-size: 14px;
   cursor: pointer;
+  font-weight: 400;
 }
 
 #test .test-btn:disabled {
