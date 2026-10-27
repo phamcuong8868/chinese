@@ -299,7 +299,7 @@ function render(r)
         ["8. Lịch sử và ví dụ", escapeHTML(historyAndExamples)]
     ];
     document.getElementById("result").innerHTML = `
-        <article class="card boThu__chiTiet">
+        <article class="card boThu__chiTiet" style="border-radius: 0px 12px 12px 12px;">
             <div class="hero">
                 <div style="display: flex; flex-direction: row;">
                 <div>
@@ -311,7 +311,10 @@ function render(r)
                 </div>
                 </div>
                 <div>
-                <div class="number">BỘ THỦ ${r.id}/214 · ${r.strokes} NÉT</div>                  
+                    <div class="number" style="display: flex;gap:8px;">
+                        BỘ THỦ ${r.id}/214 · ${r.strokes} NÉT
+                        <div style="background:white; padding:3px;font-size: 14px;" onclick="document.getElementById('draw').style.display='block';">✏️</div>
+                    </div>               
                 </div>
             </div>
             <div class="boThu__chiTiet__thuocTinh">
