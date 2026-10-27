@@ -5,13 +5,14 @@
     <meta charset="utf-8">
     <meta name="viewport" content="width=device-width, initial-scale=1">
     <title>214 bộ thủ Khang Hy (dạng chữ Khải thư)</title>
-    <link rel="stylesheet" href="214-bo-thu-khang-hy_files/about.css?v=dev9">
-    <link rel="stylesheet" href="214-bo-thu-khang-hy_files/step.css?v=dev9">
-    <link rel="stylesheet" href="214-bo-thu-khang-hy_files/test.css?v=dev9">
+    <link rel="stylesheet" href="214-bo-thu-khang-hy_files/about.css?v=dev11">
+    <link rel="stylesheet" href="214-bo-thu-khang-hy_files/step.css?v=dev11">
+    <link rel="stylesheet" href="214-bo-thu-khang-hy_files/test.css?v=dev11">
+    <link rel="stylesheet" href="214-bo-thu-khang-hy_files/draw.css?v=dev11">
 </head>
-<body>
-    <div class="return-button image-button" onclick="document.getElementById('menuScreen').style.display='block';">↻</div>
+<body>    
     <main id="main">
+        <div class="return-button image-button" onclick="document.getElementById('menuScreen').style.display='block';">🏠</div>
         <div id="result" aria-live="polite"><div class="blank">Chọn ngẫu nhiên hoặc dùng các nút điều hướng để xem bộ thủ.</div></div>
 
         <nav class="media-controls" aria-label="Điều hướng bộ thủ">
@@ -21,13 +22,37 @@
             <button id="nextBtn" class="move-btn" type="button" aria-label="Bộ tiếp theo" title="Bộ tiếp theo">▶</button>
             <button id="lastBtn" class="move-btn" type="button" aria-label="Đến bộ cuối cùng" title="Đến bộ cuối cùng">⏭</button>
         </nav>
+
+        <div id="draw" class="draw">
+            <div class="toolbar">
+                <div class="button" id="clear">Xóa</div>
+                <div class="button" id="save">Lưu PNG</div>
+                <div class="button" onclick="document.getElementById('draw').style.display='none';">Đóng</div>
+            
+            </div>
+            <div class="toolbar">
+                <label>
+                    Màu
+                    <input type="color" id="color" value="#000000">
+                </label>
+
+                <label>
+                    Cỡ nét
+                    <input type="range" id="size"
+                        min="1" max="30" value="4">
+                    <span id="sizeValue">4 px</span>
+                </label>
+            </div>
+            <canvas id="canvas"></canvas>
+        </div>
     </main>
     <test id="test">
 
     </test>
-    <script src="214-bo-thu-khang-hy_files/step.js?v=dev9"></script>
-    <script src="214-bo-thu-khang-hy_files/about.js?v=dev9"></script>
-    <script src="214-bo-thu-khang-hy_files/test.js?v=dev9"></script>  
+    <script src="214-bo-thu-khang-hy_files/step.js?v=dev11"></script>
+    <script src="214-bo-thu-khang-hy_files/about.js?v=dev11"></script>
+    <script src="214-bo-thu-khang-hy_files/test.js?v=dev11"></script> 
+    <script src="214-bo-thu-khang-hy_files/draw.js?v=dev11"></script>  
 
     <script>
         "use strict";
