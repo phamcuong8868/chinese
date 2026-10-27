@@ -5,6 +5,7 @@ test
     z-index: 21;
     background-color: #eee;
     display: none;
+    padding: 8px;
 }
 
 #test {
@@ -49,7 +50,7 @@ test
 
 #test .test-stat {
   background: var(--test-bg);
-  padding: 12px 6px;
+  padding: 4px 6px;
   border-radius: 8px;
   text-align: center;
 }
