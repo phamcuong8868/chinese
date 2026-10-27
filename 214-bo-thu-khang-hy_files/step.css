@@ -21,6 +21,31 @@
     #result { margin-top:18px; }
     .card { border:1px solid var(--line); border-radius:18px; padding:20px; }
     .hero { display:flex; flex-direction: column; align-items:center; gap:18px; border-bottom:1px solid var(--line); }
+    .boThu__chiTiet
+    {
+        display: flex;
+        flex-direction: row;
+    }
+
+    .boThu__chiTiet__thuocTinh
+    {
+        height:80vh; 
+        overflow: scroll;
+        margin-top:8px;
+    }
+
+    @media (max-width: 576px)
+    {
+        .boThu__chiTiet
+        {
+            flex-direction: column;
+        }
+
+        .boThu__chiTiet__thuocTinh
+        {
+            height:40vh; 
+        }
+    }
     .glyph { font-family:"Noto Serif CJK SC","Noto Serif CJK TC","Songti SC",serif; font-size:clamp(5rem,24vw,8rem); line-height:1.05; min-width:110px; text-align:center; }
     .number { color:var(--muted); font-size:.95rem; }
     h2 { margin:0 0 8px; font-size:1.25rem; }
