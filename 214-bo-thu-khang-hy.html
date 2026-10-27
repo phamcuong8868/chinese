@@ -25,23 +25,15 @@
 
         <div id="draw" class="draw">
             <div class="toolbar">
-                <div class="button" id="clear">Xóa</div>
-                <div class="button" id="save">Lưu PNG</div>
-                <div class="button" onclick="document.getElementById('draw').style.display='none';">Đóng</div>
-            
+                <div class="button" style="padding: 2px 6px;" id="clear">Xóa</div>
+                <div class="button" style="padding: 2px 6px;" id="save">Lưu PNG</div>
+                <div class="button" style="padding: 2px 6px;" onclick="document.getElementById('draw').style.display='none';">Đóng</div>
             </div>
             <div class="toolbar">
-                <label>
-                    Màu
                     <input type="color" id="color" value="#000000">
-                </label>
-
-                <label>
-                    Cỡ nét
                     <input type="range" id="size"
-                        min="1" max="30" value="4">
+                        min="1" max="10" value="4">
                     <span id="sizeValue">4 px</span>
-                </label>
             </div>
             <canvas id="canvas"></canvas>
         </div>
