@@ -9,6 +9,7 @@ const RadicalTest = (() => {
   };
 
   const TOTAL_QUESTIONS = 30;
+  const LEVEL_QUESTIONS = Math.floor(TOTAL_QUESTIONS * 0.9);
   const TOTAL_TIME = 30 * 60;
 
   let bank = [];
@@ -230,6 +231,25 @@ const RadicalTest = (() => {
     return result;
   }
 
+  function getMasteredCount(progress) {
+    return radicals.filter(r => {
+      const p = progress[String(r.id)];
+
+      return p &&
+        p.attempts >= 3 &&
+        p.correct >= 3 &&
+        p.correct / p.attempts >= 0.8;
+    }).length;
+  }
+
+  function getLevel(mastered) {
+    const percent = mastered / radicals.length * 100;
+    return percent > 75 ? 4
+        : percent > 50 ? 3
+        : percent > 25 ? 2
+        : 1;
+  }
+
   // =========================
   // 3. CHỌN 30 CÂU
   // =========================
@@ -242,42 +262,49 @@ const RadicalTest = (() => {
       return false;
     }
 
-    // Vòng 1: ưu tiên một câu cho mỗi bộ thủ.
-    const groups = new Map();
+    const mastered = getMasteredCount(read(STORAGE.progress, {}));
+    const level = getLevel(mastered);
+    const maxRadicalId = Math.ceil(radicals.length * level / 4);
+    const levelBank = bank.filter(q => q.radicalId <= maxRadicalId);
 
-    bank.forEach(q => {
-      if (!groups.has(q.radicalId)) {
-        groups.set(q.radicalId, []);
-      }
+    const selectQuestions = (pool, count, excluded = new Set()) => {
+      const groups = new Map();
 
-      groups.get(q.radicalId).push(q);
-    });
+      pool.filter(q => !excluded.has(q)).forEach(q => {
+        if (!groups.has(q.radicalId)) {
+          groups.set(q.radicalId, []);
+        }
 
-    const selected = [];
+        groups.get(q.radicalId).push(q);
+      });
 
-    shuffle([...groups.values()]).forEach(group => {
-      if (selected.length < TOTAL_QUESTIONS) {
+      const selected = [];
+
+      shuffle([...groups.values()]).forEach(group => {
+        if (selected.length < count) {
+          selected.push(shuffle(group)[0]);
+        }
+      });
+
+      if (selected.length < count) {
+        const used = new Set([...excluded, ...selected]);
         selected.push(
-          shuffle(group)[0]
+          ...shuffle(pool.filter(q => !used.has(q)))
+            .slice(0, count - selected.length)
         );
       }
-    });
 
-    // Nếu chưa đủ 30 câu, bổ sung câu từ các bộ thủ khác.
-    if (selected.length < TOTAL_QUESTIONS) {
-      const used = new Set(selected);
+      return selected;
+    };
 
-      const remainingBank = shuffle(
-        bank.filter(q => !used.has(q))
-      );
-
-      selected.push(
-        ...remainingBank.slice(
-          0,
-          TOTAL_QUESTIONS - selected.length
-        )
-      );
-    }
+    const selected = selectQuestions(levelBank, LEVEL_QUESTIONS);
+    selected.push(
+      ...selectQuestions(
+        bank,
+        TOTAL_QUESTIONS - LEVEL_QUESTIONS,
+        new Set(selected)
+      )
+    );
 
     questions = shuffle(
       selected.slice(0, TOTAL_QUESTIONS)
@@ -615,82 +642,51 @@ const RadicalTest = (() => {
     const history = read(STORAGE.history, []);
     const progress = read(STORAGE.progress, {});
 
-    const mastered = radicals.filter(r => {
-      const p = progress[String(r.id)];
-
-      return p &&
-        p.attempts >= 3 &&
-        p.correct >= 3 &&
-        p.correct / p.attempts >= 0.8;
-    }).length;
+    const mastered = getMasteredCount(progress);
 
     const percent = Math.round(mastered / 214 * 100);
+    const level = getLevel(mastered);
+    const maxRadicalId = Math.ceil(214 * level / 4);
 
     root.innerHTML = `
-        <div class="test-title">
-          📝 Luyện tập 214 bộ thủ
-        </div>
-      <div class="test-card">
-        <div class="test-stats">
+        <div class="test-card">
+            <div style="font-size:26px;font-weight:bold">
+                📊 ${mastered}/214 bộ thủ
+            </div>
 
-          <div class="test-stat">
-            <strong>30</strong>
-            <span class="test-muted">Số câu</span>
-          </div>
+            <div class="test-progress">
+                <div style="width:${percent}%"></div>
+            </div>
 
-          <div class="test-stat">
-            <strong>30'</strong>
-            <span class="test-muted">Thời gian</span>
-          </div>
-
-          <div class="test-stat">
-            <strong>${history.length}</strong>
-            <span class="test-muted">Bài đã làm</span>
-          </div>
-
+            <p class="test-muted">
+                Bạn đã nắm vững khoảng ${percent}% số bộ thủ.
+            </p>
         </div>
 
-        <button
-          class="test-btn"
-          id="test-start"
-          style="width:70%;"
-        >
-          Bắt đầu kiểm tra<br>开始测试<br>(kāishǐ cèshì)
-        </button>
-        <button
-          class="test-btn"
-          style="width:28%; background: #999"
-           onclick="document.getElementById('menuScreen').style.display='block';document.getElementById('test').style.display='none';"
-        >
-          Bỏ qua<br>跳过 (tiàoguò)
-        </button>
+        <div class="test-card">            
+
+            <button
+                class="test-btn"
+                id="test-start"
+                style="width:70%;"
+            >
+                Bắt đầu kiểm tra<br>开始测试<br>(kāishǐ cèshì)
+            </button>
+            <button
+                class="test-btn"
+                style="width:28%; background: white; border: 1px solid #999; color: #000;"
+                onclick="document.getElementById('menuScreen').style.display='block';document.getElementById('test').style.display='none';"
+            >
+                Bỏ qua<br>跳过<br>(tiàoguò)
+            </button>
       </div>
 
-      <div class="test-card">
-
-        <div class="test-title">📊 Trình độ hiện tại</div>
-
-        <div style="font-size:26px;font-weight:bold">
-          ${mastered}/214 bộ thủ
-        </div>
-
-        <div class="test-progress">
-          <div style="width:${percent}%"></div>
-        </div>
-
-        <p class="test-muted">
-          Bạn đã nắm vững khoảng ${percent}% số bộ thủ.
-          Hãy tiếp tục luyện tập để ghi nhớ đủ 214 bộ thủ!
-        </p>
-
-      </div>
+      
 
       <div class="test-card">
-
         <div class="test-title">📚 Lịch sử làm bài 答题历史 (dá tí lìshǐ)</div>
-
         ${history.length ? `
-          <div class="test-history">
+          <div class="test-history" style="overflow:scroll;max-height: 50vh;">
 
             ${history.slice(0, 10).map(item => `
               <div class="test-history-row">
