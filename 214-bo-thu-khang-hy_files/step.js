@@ -278,26 +278,27 @@ function getExamples(r) {
   ).join("");
 }
 let currentIndex = -1;
-function render(r) {
-  currentIndex = r.id - 1;
-  const d = details[r.char] || {};
-  const examplesList = d.examples || exactExamples[r.char] || [];
-  const examplesText = examplesList.map(x => `${x[0]} (${x[1]}): ${x[2]}`).join("; ");
-  const variant = d.variant || `Thường giữ dạng ${r.char}; (Hình thức hoặc tỷ lệ có thể thay đổi theo vị trí trong chữ ghép)`;
-  const pict = d.pict || r.meaning;
-  const historyAndExamples = [d.history || "", examplesText ? `Ví dụ: ${examplesText}.` : ""].filter(Boolean).join(" ") || `Gợi nhớ theo nghĩa “${r.meaning}”.`;
-  const extra = d.role ? `<section class="extra"><h3>Ghi chú mở rộng</h3><p>${escapeHTML(d.role)}</p></section>` : "";
-  const rows = [
-    ["1. Số thứ tự", `${r.id}/214`],
-    ["2. Chữ bộ thủ đầy đủ", `<span class="radical-value" lang="zh">${escapeHTML(r.char)}</span>`],
-    ["3. Âm Hán Việt", escapeHTML(r.hanviet)],
-    ["4. Cách đọc tiếng Trung", `${escapeHTML(r.pinyin)} (pinyin)`],
-    ["5. Ý nghĩa", escapeHTML(r.meaning)],
-    ["6. Ý nghĩa tượng hình", escapeHTML(pict)],
-    ["7. Dạng biến thể", escapeHTML(variant)],
-    ["8. Lịch sử và ví dụ", escapeHTML(historyAndExamples)]
-  ];
-  document.getElementById("result").innerHTML = `
+function render(r) 
+{
+    currentIndex = r.id - 1;
+    const d = details[r.char] || {};
+    const examplesList = d.examples || exactExamples[r.char] || [];
+    const examplesText = examplesList.map(x => `${x[0]} (${x[1]}): ${x[2]}`).join("; ");
+    const variant = d.variant || `Thường giữ dạng ${r.char}; (Hình thức hoặc tỷ lệ có thể thay đổi theo vị trí trong chữ ghép)`;
+    const pict = d.pict || r.meaning;
+    const historyAndExamples = [d.history || "", examplesText ? `Ví dụ: ${examplesText}.` : ""].filter(Boolean).join(" ") || `Gợi nhớ theo nghĩa “${r.meaning}”.`;
+    const extra = d.role ? `<section class="extra"><h3>Ghi chú mở rộng</h3><p>${escapeHTML(d.role)}</p></section>` : "";
+    const rows = [
+        ["1. Số thứ tự", `${r.id}/214`],
+        ["2. Chữ bộ thủ đầy đủ", `<span class="radical-value" lang="zh">${escapeHTML(r.char)}</span>`],
+        ["3. Âm Hán Việt", escapeHTML(r.hanviet)],
+        ["4. Cách đọc tiếng Trung", `${escapeHTML(r.pinyin)} (pinyin)`],
+        ["5. Ý nghĩa", escapeHTML(r.meaning)],
+        ["6. Ý nghĩa tượng hình", escapeHTML(pict)],
+        ["7. Dạng biến thể", escapeHTML(variant)],
+        ["8. Lịch sử và ví dụ", escapeHTML(historyAndExamples)]
+    ];
+    document.getElementById("result").innerHTML = `
         <article class="card boThu__chiTiet">
             <div class="hero">
                 <div style="display: flex; flex-direction: row;">
@@ -318,23 +319,28 @@ function render(r) {
                 ${extra}
             </div>
         </article>`;
-  document.getElementById("firstBtn").disabled = currentIndex === 0;
-  document.getElementById("prevBtn").disabled = currentIndex === 0;
-  document.getElementById("nextBtn").disabled = currentIndex === radicals.length - 1;
-  document.getElementById("lastBtn").disabled = currentIndex === radicals.length - 1;
+    document.getElementById("firstBtn").disabled = currentIndex === 0;
+    document.getElementById("prevBtn").disabled = currentIndex === 0;
+    document.getElementById("nextBtn").disabled = currentIndex === radicals.length - 1;
+    document.getElementById("lastBtn").disabled = currentIndex === radicals.length - 1;
 }
-function showIndex(index) {
-  const safeIndex = Math.max(0, Math.min(radicals.length - 1, index));
-  render(radicals[safeIndex]);
+
+function showIndex(index) 
+{
+    const safeIndex = Math.max(0, Math.min(radicals.length - 1, index));
+    render(radicals[safeIndex]);
 }
-function chooseRandom() {
-  let index = Math.floor(Math.random() * radicals.length);
-  if (radicals.length > 1 && index === currentIndex) index = (index + 1) % radicals.length;
-  showIndex(index);
+
+function chooseRandom() 
+{
+    let index = Math.floor(Math.random() * radicals.length);
+    if (radicals.length > 1 && index === currentIndex) index = (index + 1) % radicals.length;
+    showIndex(index);
 }
-  document.getElementById("randomBtn").addEventListener("click", chooseRandom);
-  document.getElementById("firstBtn").addEventListener("click", () => showIndex(0));
-  document.getElementById("prevBtn").addEventListener("click", () => showIndex(currentIndex < 0 ? 0 : currentIndex - 1));
-  document.getElementById("nextBtn").addEventListener("click", () => showIndex(currentIndex < 0 ? 0 : currentIndex + 1));
-  document.getElementById("lastBtn").addEventListener("click", () => showIndex(radicals.length - 1));
-  chooseRandom();
+
+document.getElementById("randomBtn").addEventListener("click", chooseRandom);
+document.getElementById("firstBtn").addEventListener("click", () => showIndex(0));
+document.getElementById("prevBtn").addEventListener("click", () => showIndex(currentIndex < 0 ? 0 : currentIndex - 1));
+document.getElementById("nextBtn").addEventListener("click", () => showIndex(currentIndex < 0 ? 0 : currentIndex + 1));
+document.getElementById("lastBtn").addEventListener("click", () => showIndex(radicals.length - 1));
+chooseRandom();
