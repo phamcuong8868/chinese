@@ -298,26 +298,26 @@ function render(r) {
     ["8. Lịch sử và ví dụ", escapeHTML(historyAndExamples)]
   ];
   document.getElementById("result").innerHTML = `
-    <article class="card">
-      <div class="hero">
-        <div style="display: flex; flex-direction: row;">
-          <div>
-            <div class="glyph" lang="zh">${escapeHTML(r.char)}</div>            
-          </div>
-          <div>
-            <span id="thongTinBoSuuTap" style="margin-right: 4px; border-radius:8px;">ℹ️</span><span class="tag">Pinyin: ${escapeHTML(r.pinyin)}</span>
-            <h2>${escapeHTML(r.hanviet)} — ${escapeHTML(r.meaning)}</h2>  
-          </div>
-        </div>
-        <div>
-          <div class="number">BỘ THỦ ${r.id}/214 · ${r.strokes} NÉT</div>                  
-        </div>
-      </div>
-      <div style="height:40vh; overflow: scroll;margin-top:8px;">
-        ${rows.map(([label, value]) => `<div class="detail__row"><div style="font-weight:700; font-size:14px;">${label}:</div> <div>${value}</div> </div>`).join("")}
-        ${extra}
-      </div>
-    </article>`;
+        <article class="card boThu__chiTiet">
+            <div class="hero">
+                <div style="display: flex; flex-direction: row;">
+                <div>
+                    <div class="glyph" lang="zh">${escapeHTML(r.char)}</div>            
+                </div>
+                <div>
+                    <span class="tag">Pinyin: ${escapeHTML(r.pinyin)}</span>
+                    <h2>${escapeHTML(r.hanviet)} — ${escapeHTML(r.meaning)}</h2>  
+                </div>
+                </div>
+                <div>
+                <div class="number">BỘ THỦ ${r.id}/214 · ${r.strokes} NÉT</div>                  
+                </div>
+            </div>
+            <div class="boThu__chiTiet__thuocTinh">
+                ${rows.map(([label, value]) => `<div class="detail__row"><div style="font-weight:700; font-size:14px;">${label}:</div> <div>${value}</div> </div>`).join("")}
+                ${extra}
+            </div>
+        </article>`;
   document.getElementById("firstBtn").disabled = currentIndex === 0;
   document.getElementById("prevBtn").disabled = currentIndex === 0;
   document.getElementById("nextBtn").disabled = currentIndex === radicals.length - 1;
