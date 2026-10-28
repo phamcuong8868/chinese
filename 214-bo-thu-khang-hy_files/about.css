@@ -1,0 +1,40 @@
+.menuScreen
+{
+    position:fixed; 
+    z-index: 11;
+    inset: 0;
+    background:white;
+    padding: 12px;
+}
+
+.menu__container
+{
+    margin: 16px 0px;
+    display: flex;
+    flex-wrap: wrap;
+    gap: 12px;
+    justify-content: center;
+    align-items: center;
+}
+
+.menu__button
+{
+    padding: 20px 22px;
+    border-radius: 15px;
+    border: 1px solid #999;
+
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    cursor: pointer;
+}
+
+.menu__button:hover
+{
+    box-shadow: 4px 4px 4px #888888;
+}
+
+.menu__button:active
+{
+    transform: scale(1.2);
+}
