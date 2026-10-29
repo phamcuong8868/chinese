@@ -1,0 +1,357 @@
+const radicalsRaw = `
+一|Nhất|yī|1|một; nét ngang
+丨|Cổn|gǔn|1|nét sổ
+丶|Chủ|zhǔ|1|nét chấm
+丿|Phiệt|piě|1|nét phẩy
+乙|Ất|yǐ|1|can thứ hai; nét cong
+亅|Quyết|jué|1|nét móc
+二|Nhị|èr|2|hai
+亠|Đầu|tóu|2|dạng nắp; phần trên
+人|Nhân|rén|2|người
+儿|Nhi|ér|2|chân người; trẻ nhỏ tùy chữ
+入|Nhập|rù|2|đi vào
+八|Bát|bā|2|tám; tách ra
+冂|Quynh|jiōng|2|khung bao mở
+冖|Mịch|mì|2|che phủ
+冫|Băng|bīng|2|băng; lạnh
+几|Kỷ|jī|2|bàn nhỏ
+凵|Khảm|kǎn|2|khung mở phía trên
+刀|Đao|dāo|2|dao
+力|Lực|lì|2|sức mạnh
+勹|Bao|bāo|2|bao bọc
+匕|Chủy|bǐ|2|thìa; hình dao tùy cách giải thích
+匚|Phương|fāng|2|khung hộp mở
+匸|Hệ|xǐ|2|khung che giấu
+十|Thập|shí|2|mười
+卜|Bốc|bǔ|2|bói; bói toán
+卩|Tiết|jié|2|đốt; dấu ấn theo tên bộ truyền thống
+厂|Hán|hǎn|2|vách đá; mái đá
+厶|Tư|sī|2|riêng tư
+又|Hựu|yòu|2|lại; liên hệ hình tay trong chữ cổ
+口|Khẩu|kǒu|3|miệng
+囗|Vi|wéi|3|khung bao quanh
+土|Thổ|tǔ|3|đất
+士|Sĩ|shì|3|kẻ sĩ
+夂|Trĩ|zhǐ|3|bước chân; tên bộ truyền thống
+夊|Tuy|suī|3|đi chậm; tên bộ truyền thống
+夕|Tịch|xī|3|buổi tối
+大|Đại|dà|3|to; lớn
+女|Nữ|nǚ|3|phụ nữ
+子|Tử|zǐ|3|con; trẻ nhỏ
+宀|Miên|mián|3|mái nhà
+寸|Thốn|cùn|3|thốn; đơn vị đo truyền thống
+小|Tiểu|xiǎo|3|nhỏ
+尢|Uông|wāng|3|dạng khuyết tật chân theo tên bộ truyền thống
+尸|Thi|shī|3|xác; thân thể trong một số chữ
+屮|Triệt|chè|3|mầm cây theo cách gọi bộ truyền thống
+山|Sơn|shān|3|núi
+巛|Xuyên|chuān|3|dòng sông; dòng chảy
+工|Công|gōng|3|công việc; thợ
+己|Kỷ|jǐ|3|bản thân
+巾|Cân|jīn|3|khăn
+干|Can|gān|3|khô; can
+幺|Yêu|yāo|3|sợi tơ nhỏ; nhỏ
+广|Nghiễm|yǎn|3|mái che; nhà có mái
+廴|Dẫn|yǐn|3|bước dài; đi
+廾|Củng|gǒng|3|hai tay nâng
+弋|Dặc|yì|3|vũ khí/dụng cụ cổ; cần xét theo chữ
+弓|Cung|gōng|3|cung
+彐|Kệ|jì|3|tên bộ; hình dạng thay đổi theo kiểu chữ
+彡|Sam|shān|3|lông; vệt trang trí
+彳|Xích|chì|3|bước chân; đi
+心|Tâm|xīn|4|tim; lòng
+戈|Qua|gē|4|vũ khí cổ
+戶|Hộ|hù|4|cửa một cánh
+手|Thủ|shǒu|4|tay
+支|Chi|zhī|4|nhánh; chống đỡ
+攴|Phộc|pū|4|đánh; gõ
+文|Văn|wén|4|văn tự; hoa văn
+斗|Đẩu|dǒu|4|đấu đong; chòm sao tùy nghĩa
+斤|Cân|jīn|4|rìu; cân trong từ hiện đại
+方|Phương|fāng|4|phương hướng; vuông
+无|Vô|wú|4|không; không có
+日|Nhật|rì|4|mặt trời; ngày
+曰|Viết|yuē|4|nói; rằng
+月|Nguyệt|yuè|4|mặt trăng; tháng
+木|Mộc|mù|4|cây; gỗ
+欠|Khiếm|qiàn|4|thiếu; ngáp trong một số chữ
+止|Chỉ|zhǐ|4|dừng; bàn chân theo nguồn gốc chữ
+歹|Đãi|dǎi|4|xấu; chết theo nghĩa bộ truyền thống
+殳|Thù|shū|4|vũ khí cán dài
+毋|Vô|wú|4|chớ; không
+比|Tỷ|bǐ|4|so sánh
+毛|Mao|máo|4|lông
+氏|Thị|shì|4|thị tộc; họ
+气|Khí|qì|4|khí; hơi
+水|Thủy|shuǐ|4|nước
+火|Hỏa|huǒ|4|lửa
+爪|Trảo|zhǎo|4|móng; vuốt
+父|Phụ|fù|4|cha
+爻|Hào|yáo|4|hào trong quẻ
+爿|Tường|pán|4|mảnh gỗ; dạng trái của một số chữ
+片|Phiến|piàn|4|mảnh; lát
+牙|Nha|yá|4|răng; ngà
+牛|Ngưu|niú|4|trâu; bò
+犬|Khuyển|quǎn|4|chó
+玄|Huyền|xuán|5|đen huyền; sâu xa
+玉|Ngọc|yù|5|ngọc
+瓜|Qua|guā|5|dưa
+瓦|Ngõa|wǎ|5|ngói
+甘|Cam|gān|5|ngọt
+生|Sinh|shēng|5|sinh; sống
+用|Dụng|yòng|5|dùng
+田|Điền|tián|5|ruộng
+疋|Sơ|pǐ|5|tấm vải; chân tùy cách dùng
+疒|Nạch|nè|5|bệnh; giường bệnh theo giải thích truyền thống
+癶|Bát|bō|5|hai chân dang; tên bộ truyền thống
+白|Bạch|bái|5|trắng
+皮|Bì|pí|5|da
+皿|Mãnh|mǐn|5|đĩa; đồ đựng
+目|Mục|mù|5|mắt
+矛|Mâu|máo|5|giáo
+矢|Thỉ|shǐ|5|mũi tên
+石|Thạch|shí|5|đá
+示|Thị|shì|5|chỉ thị; bàn thờ/tế tự trong chữ cổ
+禸|Nhựu|róu|5|dấu chân; tên bộ hiếm
+禾|Hòa|hé|5|lúa
+穴|Huyệt|xué|5|hang; lỗ
+立|Lập|lì|5|đứng; dựng
+竹|Trúc|zhú|6|tre
+米|Mễ|mǐ|6|gạo
+糸|Mịch|mì|6|tơ
+缶|Phẫu|fǒu|6|đồ gốm đựng
+网|Võng|wǎng|6|lưới
+羊|Dương|yáng|6|dê; cừu
+羽|Vũ|yǔ|6|lông vũ
+老|Lão|lǎo|6|già
+而|Nhi|ér|6|mà; râu trong tên bộ truyền thống
+耒|Lỗi|lěi|6|lưỡi cày
+耳|Nhĩ|ěr|6|tai
+聿|Duật|yù|6|bút; nét bút trong tên bộ truyền thống
+肉|Nhục|ròu|6|thịt
+臣|Thần|chén|6|bề tôi
+自|Tự|zì|6|bản thân; mũi trong nguồn gốc chữ cổ
+至|Chí|zhì|6|đến
+臼|Cữu|jiù|6|cối giã
+舌|Thiệt|shé|6|lưỡi
+舛|Suyễn|chuǎn|6|trái ngược; bước chân trái chiều theo giải thích truyền thống
+舟|Chu|zhōu|6|thuyền
+艮|Cấn|gèn|6|quẻ Cấn; dừng theo nghĩa cổ
+色|Sắc|sè|6|màu sắc
+艸|Thảo|cǎo|6|cỏ
+虍|Hô|hū|6|vằn/hình hổ; tên bộ
+虫|Trùng|chóng|6|sâu bọ; côn trùng
+血|Huyết|xuè|6|máu
+行|Hành|xíng|6|đi; đường
+衣|Y|yī|6|áo; quần áo
+襾|Á|yà|6|che phủ; nắp theo tên bộ
+見|Kiến|jiàn|7|thấy; nhìn
+角|Giác|jiǎo|7|sừng; góc
+言|Ngôn|yán|7|lời nói
+谷|Cốc|gǔ|7|thung lũng
+豆|Đậu|dòu|7|đậu; đồ đựng tế lễ cổ
+豕|Thỉ|shǐ|7|lợn
+豸|Trãi|zhì|7|loài thú; tên bộ cổ
+貝|Bối|bèi|7|vỏ sò; tiền trong chữ cổ
+赤|Xích|chì|7|đỏ
+走|Tẩu|zǒu|7|chạy; đi
+足|Túc|zú|7|chân; đủ
+身|Thân|shēn|7|thân thể
+車|Xa|chē|7|xe
+辛|Tân|xīn|7|cay; đắng
+辰|Thần|chén|7|thìn; thời điểm
+辵|Sước|chuò|7|đi; di chuyển
+邑|Ấp|yì|7|thành; vùng đất
+酉|Dậu|yǒu|7|bình rượu; địa chi Dậu
+釆|Biện|biàn|7|phân biệt; dấu chân theo tên bộ
+里|Lý|lǐ|7|làng; dặm
+金|Kim|jīn|8|kim loại; vàng
+長|Trường|cháng|8|dài; trưởng thành
+門|Môn|mén|8|cửa
+阜|Phụ|fù|8|gò đất
+隶|Đãi|dài|8|nắm giữ; tên bộ cổ
+隹|Chuy|zhuī|8|chim đuôi ngắn
+雨|Vũ|yǔ|8|mưa
+青|Thanh|qīng|8|xanh; thanh
+非|Phi|fēi|8|không phải
+面|Diện|miàn|9|mặt
+革|Cách|gé|9|da thuộc; thay đổi
+韋|Vi|wéi|9|da thuộc mềm; tên bộ
+韭|Cửu|jiǔ|9|hẹ
+音|Âm|yīn|9|âm thanh
+頁|Hiệt|yè|9|đầu; trang
+風|Phong|fēng|9|gió
+飛|Phi|fēi|9|bay
+食|Thực|shí|9|ăn; thức ăn
+首|Thủ|shǒu|9|đầu
+香|Hương|xiāng|9|thơm
+馬|Mã|mǎ|10|ngựa
+骨|Cốt|gǔ|10|xương
+高|Cao|gāo|10|cao
+髟|Tiêu|biāo|10|tóc dài; tóc
+鬥|Đấu|dòu|10|đánh nhau; đấu
+鬯|Sưởng|chàng|10|rượu thơm tế lễ
+鬲|Cách|gé|10|nồi ba chân cổ
+鬼|Quỷ|guǐ|10|ma; quỷ
+魚|Ngư|yú|11|cá
+鳥|Điểu|niǎo|11|chim
+鹵|Lỗ|lǔ|11|muối; đất mặn
+鹿|Lộc|lù|11|hươu
+麥|Mạch|mài|11|lúa mì
+麻|Ma|má|11|gai; cây đay
+黃|Hoàng|huáng|12|vàng
+黍|Thử|shǔ|12|kê
+黑|Hắc|hēi|12|đen
+黹|Chỉ|zhǐ|12|thêu; may vá
+黽|Mãnh|mǐn|13|ếch; loài lưỡng cư trong tên bộ
+鼎|Đỉnh|dǐng|13|đỉnh đồng ba chân
+鼓|Cổ|gǔ|13|trống
+鼠|Thử|shǔ|13|chuột
+鼻|Tỵ|bí|14|mũi
+齊|Tề|qí|14|đều; chỉnh tề
+齒|Xỉ|chǐ|15|răng
+龍|Long|lóng|16|rồng
+龜|Quy|guī|16|rùa
+龠|Dược|yuè|17|sáo; nhạc cụ cổ
+`.trim();
+
+const radicals = radicalsRaw.split("\n").map((line, i) => {
+  const [char, hanviet, pinyin, strokes, meaning] = line.split("|");
+  return { id:i+1, char, hanviet, pinyin, strokes:Number(strokes), meaning };
+});
+if (radicals.length !== 214) {
+  console.warn("Số lượng bộ thủ hiện tại:", radicals.length, "— cần đúng 214.");
+}
+
+/* Dạng biến thể thường gặp và ví dụ tiêu biểu; chỉ khai báo khi có cơ sở phổ biến. */
+const details = {
+  "人": { variant:"亻 — thường đứng bên trái chữ ghép.", examples:[["休","xiū","nghỉ"],["你","nǐ","bạn"],["他","tā","anh ấy/người ấy"]], pict:"Dạng chữ cổ thường được phân tích như hình người nhìn nghiêng; hình thức được quy chuẩn dần thành 人.", history:"Có thể mô tả khái quát từ các dạng tượng hình cổ đến triện thư và khải thư. Muốn xác định hình dạng từng thời kỳ, cần đối chiếu bản chữ cổ có nguồn.", role:"Thường gợi ý nghĩa liên quan đến người; trong từng chữ vẫn phải xét toàn bộ cấu tạo." },
+  "口": { variant:"Thường giữ dạng 口 trong chữ ghép.", examples:[["吃","chī","ăn"],["喝","hē","uống"],["唱","chàng","hát"]], pict:"Có nguồn gốc tượng hình, liên hệ với hình miệng.", history:"Các dạng chữ cổ và dạng hiện đại khác nhau về quy phạm nét; không nên suy diễn chi tiết nếu không đối chiếu tư liệu chữ cổ.", role:"Thường liên quan miệng, lời nói hoặc hoạt động bằng miệng." },
+  "女": { variant:"Thường giữ 女, có thể đổi tỷ lệ khi nằm trong chữ ghép.", examples:[["好","hǎo","tốt"],["妈 / 媽","mā","mẹ"],["姐","jiě","chị gái"]], pict:"Các phân tích chữ cổ thường liên hệ với hình người trong tư thế ngồi/quỳ; cần xem tư liệu chữ cổ khi giải thích chi tiết.", history:"Hình dạng phát triển qua các thư thể cổ rồi được quy chuẩn trong khải thư.", role:"Có thể gợi ý nghĩa liên quan phụ nữ hoặc quan hệ gia đình, nhưng không phải lúc nào cũng vậy." },
+  "山": { variant:"Thường giữ 山.", examples:[["岩","yán","vách đá"],["峰","fēng","đỉnh núi"],["岛 / 島","dǎo","đảo"]], pict:"Chữ tượng hình gợi các đỉnh núi.", history:"Có thể so sánh dạng tượng hình cổ, tiểu triện và khải thư để thấy quá trình quy chuẩn nét.", role:"Thường gợi ý núi non hoặc địa hình." },
+  "水": { variant:"氵 — dạng thường gặp bên trái chữ ghép; 水 là dạng độc lập đầy đủ.", examples:[["河","hé","sông"],["海","hǎi","biển"],["洗","xǐ","rửa"]], pict:"Chữ tượng hình gợi dòng nước với phần trung tâm và các nét hai bên.", history:"Các dạng cổ được giản lược và quy chuẩn dần. Không dùng hình vẽ hiện đại để tự khẳng định chi tiết của từng dạng cổ.", role:"氵 thường gợi ý nghĩa liên quan nước/chất lỏng; thành phần còn lại có thể biểu âm." },
+  "木": { variant:"Thường giữ 木; tỷ lệ và vị trí có thể thay đổi trong chữ ghép.", examples:[["林","lín","rừng cây"],["森","sēn","rậm rạp"],["桥 / 橋","qiáo","cầu"]], pict:"Chữ tượng hình gợi cây có thân, cành và rễ.", history:"Dạng tượng hình cổ dần được quy chuẩn qua các thư thể; cần nguồn chữ cổ để so sánh chính xác từng giai đoạn.", role:"Thường gợi ý cây, gỗ hoặc vật liệu có nguồn gốc từ cây." },
+  "心": { variant:"忄 — thường đứng bên trái; 心 có thể xuất hiện ở dưới hoặc ở dạng độc lập.", examples:[["快","kuài","nhanh/vui"],["情","qíng","tình cảm"],["想","xiǎng","nghĩ, nhớ"]], pict:"Có liên hệ với hình trái tim/nội tạng trong phân tích chữ cổ.", history:"Dạng thành phần 忄 là biến thể vị trí thường gặp; không phải cách viết giản thể tùy ý.", role:"Thường gợi ý cảm xúc, tâm trí hoặc trạng thái bên trong." },
+  "手": { variant:"扌 — thường đứng bên trái chữ ghép.", examples:[["打","dǎ","đánh"],["找","zhǎo","tìm"],["拉","lā","kéo"]], pict:"Liên hệ với hình bàn tay trong các dạng chữ cổ.", history:"手 và 扌 là hai hình thức được dùng theo vị trí/cấu tạo; tra từ điển chữ cụ thể để xác nhận nguồn gốc.", role:"Thường gợi ý hành động dùng tay." },
+  "火": { variant:"灬 — thường gặp ở phía dưới một số chữ; 火 cũng có thể đứng độc lập hoặc ở vị trí khác.", examples:[["灯 / 燈","dēng","đèn"],["热 / 熱","rè","nóng"],["煮","zhǔ","nấu"]], pict:"Chữ tượng hình liên hệ với ngọn lửa.", history:"Dạng 火 và thành phần 灬 khác nhau về hình thức/vị trí; đối chiếu từ điển để xem cấu tạo từng chữ.", role:"Thường gợi ý lửa, nhiệt hoặc quá trình đốt/nấu." },
+  "犬": { variant:"犭 — thường đứng bên trái chữ ghép.", examples:[["狗","gǒu","chó"],["猫 / 貓","māo","mèo"],["猎 / 獵","liè","săn"]], pict:"Chữ cổ thường được giải thích là hình con chó.", history:"犭 là dạng thành phần thường gặp; không nên gọi chung là chữ giản thể của 犬 trong mọi ngữ cảnh.", role:"Thường gợi ý động vật hoặc hành vi liên quan động vật." },
+  "艸": { variant:"艹 — dạng thành phần phổ biến ở phía trên; chữ độc lập truyền thống là 艸, chữ thông dụng là 草.", examples:[["花","huā","hoa"],["草","cǎo","cỏ"],["茶","chá","trà"]], pict:"Liên hệ với mầm/cỏ mọc lên.", history:"艸 và 艹 có quan hệ dạng bộ/thành phần; vị trí trong chữ thường làm hình dạng thay đổi.", role:"Thường gợi ý thực vật." },
+  "言": { variant:"讠 — dạng giản thể thường gặp bên trái trong chữ giản thể; 言 là dạng truyền thống/đầy đủ.", examples:[["说 / 說","shuō","nói"],["话 / 話","huà","lời nói"],["请 / 請","qǐng","mời/xin"]], pict:"Liên quan đến lời nói/ngôn ngữ.", history:"讠 là dạng giản thể trong hệ chữ giản thể Trung Quốc; không đồng nhất với mọi biến thể vị trí khác.", role:"Thường gợi ý lời nói, ngôn ngữ hoặc giao tiếp." },
+  "金": { variant:"钅 — dạng giản thể thường gặp bên trái; 金 là dạng đầy đủ.", examples:[["钱 / 錢","qián","tiền"],["钟 / 鐘","zhōng","chuông/đồng hồ"],["钢 / 鋼","gāng","thép"]], pict:"Gắn với kim loại và đồ kim loại.", history:"钅 là dạng thành phần giản thể phổ biến; cần phân biệt quy tắc giản thể với biến thể thư pháp.", role:"Thường gợi ý kim loại hoặc vật dụng kim loại." },
+  "衣": { variant:"衤 — dạng thành phần thường đứng bên trái; 衣 là dạng độc lập.", examples:[["裤 / 褲","kù","quần"],["衬 / 襯","chèn","lót/áo sơ mi"],["被","bèi","chăn; bị động"]], pict:"Liên hệ với quần áo.", history:"衣/衤 là dạng đầy đủ và dạng thành phần thường dùng; đối chiếu từ điển để phân tích từng chữ.", role:"Thường gợi ý quần áo, vải vóc hoặc việc mặc." },
+  "肉": { variant:"月 — trong nhiều chữ, phần hình 月 có nguồn gốc từ 肉; cần phân biệt với bộ 月 (trăng/tháng) theo từng chữ.", examples:[["肚","dù","bụng"],["腿","tuǐ","chân"],["脸 / 臉","liǎn","mặt"]], pict:"肉 có nghĩa thịt; dạng thành phần thường hòa nhập hình thức với 月.", history:"Một số chữ có thành phần dạng 月 nhưng được phân loại theo 肉. Phải kiểm tra từ điển, không chỉ nhìn hình dạng.", role:"Thường liên quan cơ thể/thịt trong các chữ thuộc nhóm này." },
+  "刀": { variant:"刂 — thường đứng bên phải; 刀 là dạng độc lập.", examples:[["利","lì","có lợi/sắc bén"],["别 / 別","bié","khác; chia tay"],["到","dào","đến"]], pict:"Liên hệ với hình con dao.", history:"刂 là dạng thành phần vị trí thường gặp; hình thức thay đổi theo cấu tạo chữ.", role:"Có thể gợi ý cắt, phân chia hoặc công cụ sắc, nhưng không đúng cho mọi chữ." },
+  "心": { variant:"忄 — thường đứng bên trái; 心 có thể ở dưới.", examples:[["快","kuài","nhanh/vui"],["情","qíng","tình cảm"],["想","xiǎng","nghĩ"]], pict:"Liên hệ với tim và tâm trí.", history:"Xem các dạng cổ và dạng thành phần trong từ điển chữ Hán chuyên ngành.", role:"Thường gợi ý cảm xúc/tâm trí." }
+};
+
+const exactExamples = {
+  "一":[["二","èr","hai"],["三","sān","ba"]],
+  "二":[["三","sān","ba"],["天","tiān","trời"]],
+  "口":[["吃","chī","ăn"],["喝","hē","uống"]],
+  "土":[["地","dì","đất"],["城","chéng","thành phố"]],
+  "大":[["天","tiān","trời"],["太","tài","quá/rất"]],
+  "子":[["字","zì","chữ"],["学 / 學","xué","học"]],
+  "宀":[["家","jiā","nhà/gia đình"],["安","ān","yên ổn"]],
+  "日":[["明","míng","sáng"],["时 / 時","shí","thời gian"]],
+  "月":[["明","míng","sáng"],["朋","péng","bạn bè"]],
+  "田":[["男","nán","nam"],["界","jiè","ranh giới/thế giới"]],
+  "目":[["看","kàn","nhìn"],["眼","yǎn","mắt"]],
+  "言":[["说 / 說","shuō","nói"],["语 / 語","yǔ","ngôn ngữ"]],
+  "竹":[["笑","xiào","cười"],["笔 / 筆","bǐ","bút"]],
+  "米":[["粉","fěn","bột"],["粮 / 糧","liáng","lương thực"]],
+  "雨":[["雪","xuě","tuyết"],["雷","léi","sấm"]],
+  "馬":[["妈 / 媽","mā","mẹ"],["骑 / 騎","qí","cưỡi"]],
+  "魚":[["鲜 / 鮮","xiān","tươi"],["渔 / 漁","yú","đánh cá"]]
+};
+
+function escapeHTML(value) {
+  return String(value).replace(/[&<>"']/g, ch => ({
+    "&":"&amp;", "<":"&lt;", ">":"&gt;", '"':"&quot;", "'":"&#39;"
+  }[ch]));
+}
+function makeField(label, value) {
+  return `<div class="field"><div class="label">${escapeHTML(label)}</div><div class="value">${value}</div></div>`;
+}
+function getExamples(r) {
+  return (details[r.char]?.examples || exactExamples[r.char] || []).map(x =>
+    `<div class="example"><b>${escapeHTML(x[0])}</b><div>${escapeHTML(x[1])}</div><div>${escapeHTML(x[2])}</div></div>`
+  ).join("");
+}
+let currentIndex = -1;
+function render(r) 
+{
+    currentIndex = r.id - 1;
+    const d = details[r.char] || {};
+    const examplesList = d.examples || exactExamples[r.char] || [];
+    const examplesText = examplesList.map(x => `${x[0]} (${x[1]}): ${x[2]}`).join("; ");
+    const variant = d.variant || `Thường giữ dạng ${r.char}; (Hình thức hoặc tỷ lệ có thể thay đổi theo vị trí trong chữ ghép)`;
+    const pict = d.pict || r.meaning;
+    const historyAndExamples = [d.history || "", examplesText ? `Ví dụ: ${examplesText}.` : ""].filter(Boolean).join(" ") || `Gợi nhớ theo nghĩa “${r.meaning}”.`;
+    const extra = d.role ? `<section class="extra"><h3>Ghi chú mở rộng</h3><p>${escapeHTML(d.role)}</p></section>` : "";
+    const rows = [
+        ["1. Số thứ tự", `${r.id}/214`],
+        ["2. Chữ bộ thủ đầy đủ", `<span class="radical-value" lang="zh">${escapeHTML(r.char)}</span>`],
+        ["3. Âm Hán Việt", escapeHTML(r.hanviet)],
+        ["4. Cách đọc tiếng Trung", `${escapeHTML(r.pinyin)} (pinyin)`],
+        ["5. Ý nghĩa", escapeHTML(r.meaning)],
+        ["6. Ý nghĩa tượng hình", escapeHTML(pict)],
+        ["7. Dạng biến thể", escapeHTML(variant)],
+        ["8. Lịch sử và ví dụ", escapeHTML(historyAndExamples)]
+    ];
+    document.getElementById("result").innerHTML = `
+        <article class="card boThu__chiTiet" style="border-radius: 0px 12px 12px 12px;">
+            <div class="hero">
+                <div style="display: flex; flex-direction: row;">
+                <div>
+                    <div class="glyph" lang="zh">${escapeHTML(r.char)}</div>            
+                </div>
+                <div>
+                    <span class="tag">Pinyin: ${escapeHTML(r.pinyin)}</span>
+                    <h2>${escapeHTML(r.hanviet)} — ${escapeHTML(r.meaning)}</h2>  
+                </div>
+                </div>
+                <div>
+                    <div class="number" style="display: flex;gap:8px;">
+                        BỘ THỦ ${r.id}/214 · ${r.strokes} NÉT
+                        <div class="draw-button" style="background: rgba(255,255,255, 0.01); padding:3px;font-size: 14px;" onclick="showDraw();">✏️</div>
+                    </div>               
+                </div>
+            </div>
+            <div class="boThu__chiTiet__thuocTinh">
+                ${rows.map(([label, value]) => `<div class="detail__row"><div style="font-weight:700; font-size:14px;">${label}:</div> <div>${value}</div> </div>`).join("")}
+                ${extra}
+            </div>
+        </article>`;
+    document.getElementById("firstBtn").disabled = currentIndex === 0;
+    document.getElementById("prevBtn").disabled = currentIndex === 0;
+    document.getElementById("nextBtn").disabled = currentIndex === radicals.length - 1;
+    document.getElementById("lastBtn").disabled = currentIndex === radicals.length - 1;
+    
+    /*
+    const canvas2 = document.getElementById('canvas');
+    const ctx2 = canvas2.getContext('2d');
+    ctx2.clearRect(0, 0, canvas2.clientWidth, canvas2.clientHeight);
+    */
+}
+
+function showIndex(index) 
+{
+    const safeIndex = Math.max(0, Math.min(radicals.length - 1, index));
+    render(radicals[safeIndex]);
+    newWord = true;
+}
+
+function chooseRandom()
+{
+    let index = Math.floor(Math.random() * radicals.length);
+    if (radicals.length > 1 && index === currentIndex) index = (index + 1) % radicals.length;
+    showIndex(index);
+    newWord = true;
+    clearDraw();
+}
+
+document.getElementById("randomBtn").addEventListener("click", chooseRandom);
+document.getElementById("firstBtn").addEventListener("click", () => showIndex(0));
+document.getElementById("prevBtn").addEventListener("click", () => showIndex(currentIndex < 0 ? 0 : currentIndex - 1));
+document.getElementById("nextBtn").addEventListener("click", () => showIndex(currentIndex < 0 ? 0 : currentIndex + 1));
+document.getElementById("lastBtn").addEventListener("click", () => showIndex(radicals.length - 1));
