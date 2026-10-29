@@ -4,10 +4,10 @@
     <meta charset="utf-8">
     <meta name="viewport" content="width=device-width, initial-scale=1">
     <title>214 bộ thủ Khang Hy (dạng chữ Khải thư)</title>
-    <link rel="stylesheet" href="214-bo-thu-khang-hy_files/about.css?v=dev12">
-    <link rel="stylesheet" href="214-bo-thu-khang-hy_files/step.css?v=dev12">
-    <link rel="stylesheet" href="214-bo-thu-khang-hy_files/test.css?v=dev12">
-    <link rel="stylesheet" href="214-bo-thu-khang-hy_files/draw.css?v=dev12">
+    <link rel="stylesheet" href="214-bo-thu-khang-hy_files/about.css?v=dev13">
+    <link rel="stylesheet" href="214-bo-thu-khang-hy_files/step.css?v=dev13">
+    <link rel="stylesheet" href="214-bo-thu-khang-hy_files/test.css?v=dev13">
+    <link rel="stylesheet" href="214-bo-thu-khang-hy_files/draw.css?v=dev13">
 </head>
 <body>
     <main id="main">
@@ -25,7 +25,8 @@
         <div id="divCheDraw" class="div-che" onclick="hideDraw();"></div>
         <div id="draw" class="draw">  
             <div class="draw__controlPannel" style="margin-bottom: 10px;">
-                
+                <div id="randomBtn2" aria-live="polite" style="font-size:28px;text-align:center;" class="image-button" onclick="chooseRandom();">🎲</div>
+
                 <label>
                     <div id="choseColor_button">
                         <input type="color" id="color" style="display: none;" value="#000000">
@@ -36,7 +37,7 @@
                 <input type="range" id="size" style="width:100px;accent-color: black;"
                     min="1" max="10" value="4">              
 
-                <div class="button" style="padding: 2px 6px;" id="clear">🗑 Clear</div>
+                <div class="button" style="padding: 2px 6px;" id="clear">🗑</div>
                 <div></div>
                 <div class="image-button" style="padding: 2px 6px;" onclick="hideDraw();">&#10005</div>
             </div>            
@@ -52,10 +53,10 @@
         "use strict";   
         var newWord = false;     
     </script>
-    <script src="214-bo-thu-khang-hy_files/step.js?v=dev12"></script>
-    <script src="214-bo-thu-khang-hy_files/about.js?v=dev12"></script>
-    <script src="214-bo-thu-khang-hy_files/test.js?v=dev12"></script> 
-    <script src="214-bo-thu-khang-hy_files/draw.js?v=dev12"></script>      
+    <script src="214-bo-thu-khang-hy_files/step.js?v=dev13"></script>
+    <script src="214-bo-thu-khang-hy_files/about.js?v=dev13"></script>
+    <script src="214-bo-thu-khang-hy_files/test.js?v=dev13"></script> 
+    <script src="214-bo-thu-khang-hy_files/draw.js?v=dev13"></script>      
 </body>
 </html>
 <!-- <table class="summary"><tbody>${rows.map(([label, value]) => `<tr><th scope="row">${label}</th><td>${value}</td></tr>`).join("")}</tbody></table> -->
