@@ -1,4 +1,4 @@
-const radicalsRaw = `
+const danhSachBoThuRaw = `
 一|Nhất|yī|1|một; nét ngang
 丨|Cổn|gǔn|1|nét sổ
 丶|Chủ|zhǔ|1|nét chấm
@@ -215,12 +215,15 @@ const radicalsRaw = `
 龠|Dược|yuè|17|sáo; nhạc cụ cổ
 `.trim();
 
-const radicals = radicalsRaw.split("\n").map((line, i) => {
-  const [char, hanviet, pinyin, strokes, meaning] = line.split("|");
-  return { id:i+1, char, hanviet, pinyin, strokes:Number(strokes), meaning };
+const danhSachBoThu = danhSachBoThuRaw.split("\n").map((line, i) => 
+{
+    const [hanTu, hanViet, pinyin, soNet, yNghia] = line.split("|");
+    return { id:i+1, hanTu, hanViet, pinyin, soNet:Number(soNet), yNghia };
 });
-if (radicals.length !== 214) {
-  console.warn("Số lượng bộ thủ hiện tại:", radicals.length, "— cần đúng 214.");
+
+if (danhSachBoThu.length !== 214) 
+{
+    console.warn("Số lượng bộ thủ hiện tại:", danhSachBoThu.length, "— cần đúng 214.");
 }
 
 /* Dạng biến thể thường gặp và ví dụ tiêu biểu; chỉ khai báo khi có cơ sở phổ biến. */
@@ -273,7 +276,7 @@ function makeField(label, value) {
   return `<div class="field"><div class="label">${escapeHTML(label)}</div><div class="value">${value}</div></div>`;
 }
 function getExamples(r) {
-  return (details[r.char]?.examples || exactExamples[r.char] || []).map(x =>
+  return (details[r.hanTu]?.examples || exactExamples[r.hanTu] || []).map(x =>
     `<div class="example"><b>${escapeHTML(x[0])}</b><div>${escapeHTML(x[1])}</div><div>${escapeHTML(x[2])}</div></div>`
   ).join("");
 }
@@ -281,19 +284,19 @@ let currentIndex = -1;
 function render(r) 
 {
     currentIndex = r.id - 1;
-    const d = details[r.char] || {};
-    const examplesList = d.examples || exactExamples[r.char] || [];
+    const d = details[r.hanTu] || {};
+    const examplesList = d.examples || exactExamples[r.hanTu] || [];
     const examplesText = examplesList.map(x => `${x[0]} (${x[1]}): ${x[2]}`).join("; ");
-    const variant = d.variant || `Thường giữ dạng ${r.char}; (Hình thức hoặc tỷ lệ có thể thay đổi theo vị trí trong chữ ghép)`;
-    const pict = d.pict || r.meaning;
-    const historyAndExamples = [d.history || "", examplesText ? `Ví dụ: ${examplesText}.` : ""].filter(Boolean).join(" ") || `Gợi nhớ theo nghĩa “${r.meaning}”.`;
+    const variant = d.variant || `Thường giữ dạng ${r.hanTu}; (Hình thức hoặc tỷ lệ có thể thay đổi theo vị trí trong chữ ghép)`;
+    const pict = d.pict || r.yNghia;
+    const historyAndExamples = [d.history || "", examplesText ? `Ví dụ: ${examplesText}.` : ""].filter(Boolean).join(" ") || `Gợi nhớ theo nghĩa “${r.yNghia}”.`;
     const extra = d.role ? `<section class="extra"><h3>Ghi chú mở rộng</h3><p>${escapeHTML(d.role)}</p></section>` : "";
     const rows = [
         ["1. Số thứ tự", `${r.id}/214`],
-        ["2. Chữ bộ thủ đầy đủ", `<span class="radical-value" lang="zh">${escapeHTML(r.char)}</span>`],
-        ["3. Âm Hán Việt", escapeHTML(r.hanviet)],
+        ["2. Chữ bộ thủ đầy đủ", `<span class="boThu-value" lang="zh">${escapeHTML(r.hanTu)}</span>`],
+        ["3. Âm Hán Việt", escapeHTML(r.hanViet)],
         ["4. Cách đọc tiếng Trung", `${escapeHTML(r.pinyin)} (pinyin)`],
-        ["5. Ý nghĩa", escapeHTML(r.meaning)],
+        ["5. Ý nghĩa", escapeHTML(r.yNghia)],
         ["6. Ý nghĩa tượng hình", escapeHTML(pict)],
         ["7. Dạng biến thể", escapeHTML(variant)],
         ["8. Lịch sử và ví dụ", escapeHTML(historyAndExamples)]
@@ -303,16 +306,16 @@ function render(r)
             <div class="hero">
                 <div style="display: flex; flex-direction: row;">
                 <div>
-                    <div class="glyph" lang="zh">${escapeHTML(r.char)}</div>            
+                    <div class="glyph" lang="zh">${escapeHTML(r.hanTu)}</div>            
                 </div>
                 <div>
                     <span class="tag">Pinyin: ${escapeHTML(r.pinyin)}</span>
-                    <h2>${escapeHTML(r.hanviet)} — ${escapeHTML(r.meaning)}</h2>  
+                    <h2>${escapeHTML(r.hanViet)} — ${escapeHTML(r.yNghia)}</h2>  
                 </div>
                 </div>
                 <div>
                     <div class="number" style="display: flex;gap:8px;">
-                        BỘ THỦ ${r.id}/214 · ${r.strokes} NÉT
+                        BỘ THỦ ${r.id}/214 · ${r.soNet} NÉT
                         <div class="draw-button" style="background: rgba(255,255,255, 0.01); padding:3px;font-size: 14px;" onclick="showDraw();">✏️</div>
                     </div>               
                 </div>
@@ -324,8 +327,8 @@ function render(r)
         </article>`;
     document.getElementById("firstBtn").disabled = currentIndex === 0;
     document.getElementById("prevBtn").disabled = currentIndex === 0;
-    document.getElementById("nextBtn").disabled = currentIndex === radicals.length - 1;
-    document.getElementById("lastBtn").disabled = currentIndex === radicals.length - 1;
+    document.getElementById("nextBtn").disabled = currentIndex === danhSachBoThu.length - 1;
+    document.getElementById("lastBtn").disabled = currentIndex === danhSachBoThu.length - 1;
     
     /*
     const canvas2 = document.getElementById('canvas');
@@ -336,15 +339,15 @@ function render(r)
 
 function showIndex(index) 
 {
-    const safeIndex = Math.max(0, Math.min(radicals.length - 1, index));
-    render(radicals[safeIndex]);
+    const safeIndex = Math.max(0, Math.min(danhSachBoThu.length - 1, index));
+    render(danhSachBoThu[safeIndex]);
     newWord = true;
 }
 
 function chooseRandom()
 {
-    let index = Math.floor(Math.random() * radicals.length);
-    if (radicals.length > 1 && index === currentIndex) index = (index + 1) % radicals.length;
+    let index = Math.floor(Math.random() * danhSachBoThu.length);
+    if (danhSachBoThu.length > 1 && index === currentIndex) index = (index + 1) % danhSachBoThu.length;
     showIndex(index);
     newWord = true;
     clearDraw();
@@ -354,4 +357,4 @@ document.getElementById("randomBtn").addEventListener("click", chooseRandom);
 document.getElementById("firstBtn").addEventListener("click", () => showIndex(0));
 document.getElementById("prevBtn").addEventListener("click", () => showIndex(currentIndex < 0 ? 0 : currentIndex - 1));
 document.getElementById("nextBtn").addEventListener("click", () => showIndex(currentIndex < 0 ? 0 : currentIndex + 1));
-document.getElementById("lastBtn").addEventListener("click", () => showIndex(radicals.length - 1));
+document.getElementById("lastBtn").addEventListener("click", () => showIndex(danhSachBoThu.length - 1));

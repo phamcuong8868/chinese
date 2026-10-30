@@ -1,31 +1,28 @@
-const RadicalTest = (() => 
+const BaiKiemTraBoThu = (() => 
 {
     const root = document.getElementById("test");
-
     if (!root) return { init() {} };
-
     const STORAGE = 
     {
-        history: "radical_test_history",
-        progress: "radical_test_progress"
+        history: "boThu_test_history",
+        progress: "boThu_test_progress"
     };
 
-    const TOTAL_QUESTIONS = 30;
-    const LEVEL_QUESTIONS = Math.floor(TOTAL_QUESTIONS * 0.9);
-    const TOTAL_TIME = 30 * 60;
+    const TEST_TOTAL_QUESTIONS = 30;
+    const TEST_QUESTIONS_IN_LEVEL = Math.floor(TEST_TOTAL_QUESTIONS * 0.9);
+    const TEST_TOTAL_TIME = 30 * 60;
 
     let bank = [];
-    let questions = [];
+    let test_danhSachCauHoi = [];
     let answers = [];
     let current = 0;
-    let remaining = TOTAL_TIME;
+    let remaining = TEST_TOTAL_TIME;
     let timer = null;
     let started = false;
 
     // =========================
     // 1. TIỆN ÍCH
     // =========================
-
     function esc(value) 
     {
         return String(value ?? "").replace(/[&<>"']/g, c => ({
@@ -42,30 +39,20 @@ const RadicalTest = (() =>
         return String(value ?? "").split("<br>").map(esc).join("<br>");
     }
 
-    function addSupplementaryInfo(subtitle, radical, type)
+    function themNoiDungThamKhao(subTitle, boThu, noiDungHoi)
     {
-        const askedField = {
-            hanviet: "hanviet",
-            pinyin: "pinyin",
-            meaning: "meaning",
-            strokes: "strokes",
-            id: "id"
-        }[type];
         const info = [];
-
         const readings = [];
-        if (askedField !== "hanviet" && radical.hanviet) readings.push(radical.hanviet);
-        if (askedField !== "pinyin" && radical.pinyin) readings.push(radical.pinyin);
-        if (readings.length) {
-            const reading = readings.length === 2
-                ? `${readings[0]} (${readings[1]})`
-                : readings[0];
+        if (noiDungHoi !== "hanViet" && boThu.hanViet) readings.push(boThu.hanViet);
+        if (noiDungHoi !== "pinyin" && boThu.pinyin) readings.push(boThu.pinyin);
+        if (readings.length) 
+        {
+            const reading = readings.length === 2 ? `${readings[0]} (${readings[1]})` : readings[0];
             info.push(reading);
         }
-        if (askedField !== "meaning" && radical.meaning) info.push(radical.meaning);
-        if (askedField !== "id") info.push(`${radical.id}/214`);
-
-        return `${subtitle}<br>${info.join(" - ")}`;
+        if (noiDungHoi !== "yNghia" && boThu.yNghia) info.push(boThu.yNghia);
+        if (noiDungHoi !== "id") info.push(`${boThu.id}/214`);
+        return `${subTitle}<br>${info.join(" - ")}`;
     }
 
     
@@ -91,15 +78,14 @@ const RadicalTest = (() =>
     }
 
 
-    function shuffle(array) 
+    function xaoTron(array) 
     {
         const result = [...array];
-
-        for (let i = result.length - 1; i > 0; i--) {
-        const j = Math.floor(Math.random() * (i + 1));
-        [result[i], result[j]] = [result[j], result[i]];
+        for (let i = result.length - 1; i > 0; i--) 
+        {
+            const j = Math.floor(Math.random() * (i + 1));
+            [result[i], result[j]] = [result[j], result[i]];
         }
-
         return result;
     }
 
@@ -111,12 +97,19 @@ const RadicalTest = (() =>
             return `${String(m).padStart(2, "0")}:${String(s).padStart(2, "0")}`;
     }
 
+
+
+
+
+
+
+
     // =========================
     // 2. TẠO CÂU HỎI
     // =========================
-    function makeQuestion(radical, type, title, subtitle, field) 
+    function makeQuestion(boThu, noiDungHoi, title, subTitle, field) 
     {
-        const correct = radical[field];
+        const correct = boThu[field];
         if (correct === undefined || correct === null || correct === "") 
         {
             return null;
@@ -125,8 +118,8 @@ const RadicalTest = (() =>
         // Tạo tập đáp án sai, không trùng đáp án đúng.
         const wrong = 
         [...new Set(
-            radicals
-            .filter(r => r.id !== radical.id)
+            danhSachBoThu
+            .filter(r => r.id !== boThu.id)
             .map(r => String(r[field] ?? ""))
             .filter(value =>
                 value !== "" &&
@@ -136,32 +129,34 @@ const RadicalTest = (() =>
 
         if (wrong.length < 3) return null;
         
-        const options = shuffle([
+        const options = xaoTron([
             String(correct),
-            ...shuffle(wrong).slice(0, 3)
+            ...xaoTron(wrong).slice(0, 3)
         ]);
 
         return {
-            radicalId: radical.id,
-            radicalChar: radical.char,
-            type,
+            boThuId: boThu.id,
+            hanTu: boThu.hanTu,
+            noiDungHoi,
             title,
-            subtitle: addSupplementaryInfo(subtitle, radical, type),
+            subTitle: themNoiDungThamKhao(subTitle, boThu, noiDungHoi),
             answer: String(correct),
             options
         };
     }
 
+
+/*
     // Câu hỏi mở rộng dựa trên ví dụ trong dữ liệu.
-    function makeExampleQuestion(radical, example, index) 
+    function makeExampleQuestion(boThu, example, index) 
     {
-        const [chars, pinyin, meaning] = example;
-        if (!chars || !pinyin || !meaning) return [];
+        const [hanTus, pinyin, yNghia] = example;
+        if (!hanTus || !pinyin || !yNghia) return [];
         const result = [];
 
         const pinyinOptions = [
         ...new Set(
-            radicals.map(r => r.pinyin).filter(
+            danhSachBoThu.map(r => r.pinyin).filter(
             value => value && value !== pinyin
             )
         )
@@ -169,108 +164,116 @@ const RadicalTest = (() =>
 
         if (pinyinOptions.length >= 3) {
         result.push({
-            radicalId: radical.id,
-            radicalChar: radical.char,
-            type: "examplePinyin",
-            title: `Phiên âm của chữ "${chars}" là gì?`,
-            subtitle: addSupplementaryInfo(`这个字“${chars}”的拼音是什么？`, radical, "example"),
+            boThuId: boThu.id,
+            hanTu: boThu.hanTu,
+            noiDungHoi: "examplePinyin",
+            title: `Phiên âm của chữ "${hanTus}" là gì?`,
+            subTitle: themNoiDungThamKhao(`这个字“${hanTus}”的拼音是什么？`, boThu, "example"),
             answer: pinyin,
-            options: shuffle([
+            options: xaoTron([
             pinyin,
-            ...shuffle(pinyinOptions).slice(0, 3)
+            ...xaoTron(pinyinOptions).slice(0, 3)
             ])
         });
         }
 
-        const meaningOptions = [
+        const yNghiaOptions = [
         ...new Set(
-            radicals.map(r => r.meaning).filter(
-            value => value && value !== meaning
+            danhSachBoThu.map(r => r.yNghia).filter(
+            value => value && value !== yNghia
             )
         )
         ];
 
-        if (meaningOptions.length >= 3) 
+        if (yNghiaOptions.length >= 3) 
         {
             result.push({
-                radicalId: radical.id,
-                radicalChar: radical.char,
-                type: "exampleMeaning",
-                title: `Chữ "${chars}" có nghĩa là gì?`,
-                subtitle: addSupplementaryInfo(`“${chars}”是什么意思？`, radical, "example"),
-                answer: meaning,
-                options: shuffle([
-                meaning,
-                ...shuffle(meaningOptions).slice(0, 3)
+                boThuId: boThu.id,
+                hanTu: boThu.hanTu,
+                noiDungHoi: "exampleMeaning",
+                title: `Chữ "${hanTus}" có nghĩa là gì?`,
+                subTitle: themNoiDungThamKhao(`“${hanTus}”是什么意思？`, boThu, "example"),
+                answer: yNghia,
+                options: xaoTron([
+                yNghia,
+                ...xaoTron(yNghiaOptions).slice(0, 3)
                 ])
             });
         }
         return result;
     }
 
-    function buildBank() 
+*/
+
+
+
+
+
+    function test_buildNganHangCauHoi() 
     {
-        const result = [];
-        radicals.forEach(r => 
+        const nganHang = [];
+        danhSachBoThu.forEach(r => 
         {
             const add = q => {
-                if (q) result.push(q);
+                if (q) nganHang.push(q);
             };
 
+            //Mỗi bộ tạo 5 loại câu hỏi và thêm vào ngân hàng
             add(makeQuestion(
                 r,
-                "hanviet",
-                `Âm Hán Việt của bộ thủ "${r.char}" là gì?`,
-                `部首“${r.char}”的汉越音是什么？`,
-                "hanviet"
+                "hanViet",
+                `Âm Hán Việt của bộ thủ "${r.hanTu}" là gì?`,
+                `部首“${r.hanTu}”的汉越音是什么？`,
+                "hanViet"
             ));
 
             add(makeQuestion(
                 r,
                 "pinyin",
-                `Phiên âm Pinyin của bộ thủ "${r.char}" là gì?`,
-                `部首“${r.char}”的拼音是什么？`,
+                `Phiên âm Pinyin của bộ thủ "${r.hanTu}" là gì?`,
+                `部首“${r.hanTu}”的拼音是什么？`,
                 "pinyin"
             ));
 
             add(makeQuestion(
                 r,
-                "meaning",
-                `Bộ thủ "${r.char}" có nghĩa là gì?`,
-                `部首“${r.char}”是什么意思？`,
-                "meaning"
+                "yNghia",
+                `Bộ thủ "${r.hanTu}" có nghĩa là gì?`,
+                `部首“${r.hanTu}”是什么意思？`,
+                "yNghia"
             ));
 
             add(makeQuestion(
                 r,
-                "strokes",
-                `Số nét của bộ thủ "${r.char}" là bao nhiêu?`,
-                `部首“${r.char}”有几画？`,
-                "strokes"
+                "soNet",
+                `Số nét của bộ thủ "${r.hanTu}" là bao nhiêu?`,
+                `部首“${r.hanTu}”有几画？`,
+                "soNet"
             ));
 
             add(makeQuestion(
                 r,
                 "id",
-                `Vị trí của bộ thủ "${r.char}" trong bảng Khang Hy là số mấy?`,
-                `“${r.char}”在康熙部首表中排第几？`,
+                `Vị trí của bộ thủ "${r.hanTu}" trong bảng Khang Hy là số mấy?`,
+                `“${r.hanTu}”在康熙部首表中排第几？`,
                 "id"
             ));
 
+            /*
             // Thêm câu hỏi về chữ ví dụ đã có.
-            const examples = details[r.char]?.examples || exactExamples[r.char] || [];
+            const examples = details[r.hanTu]?.examples || exactExamples[r.hanTu] || [];
 
             examples.forEach(example => 
             {
                 result.push(...makeExampleQuestion(r, example));
-            });
+            });*/
         });
-        return result;
+        return nganHang;
     }
 
 
     function getMasteredCount(progress) {
-        return radicals.filter(r => {
+        return danhSachBoThu.filter(r => {
         const p = progress[String(r.id)];
 
         return p &&
@@ -281,79 +284,79 @@ const RadicalTest = (() =>
     }
 
     function getLevel(mastered) {
-        const percent = mastered / radicals.length * 100;
+        const percent = mastered / danhSachBoThu.length * 100;
         return percent > 75 ? 4
             : percent > 50 ? 3
             : percent > 25 ? 2
             : 1;
     }
 
-  // =========================
-  // 3. CHỌN 30 CÂU
-  // =========================
+    // =========================
+    // 3. CHỌN 30 CÂU
+    // =========================
+    function buildTest() 
+    {
+        bank = test_buildNganHangCauHoi();
 
-  function buildTest() {
-    bank = buildBank();
-
-    if (bank.length < TOTAL_QUESTIONS) {
-      alert("Kho câu hỏi chưa đủ 30 câu.");
-      return false;
-    }
-
-    const mastered = getMasteredCount(read(STORAGE.progress, {}));
-    const level = getLevel(mastered);
-    const maxRadicalId = Math.ceil(radicals.length * level / 4);
-    const levelBank = bank.filter(q => q.radicalId <= maxRadicalId);
-
-    const selectQuestions = (pool, count, excluded = new Set()) => {
-      const groups = new Map();
-
-      pool.filter(q => !excluded.has(q)).forEach(q => {
-        if (!groups.has(q.radicalId)) {
-          groups.set(q.radicalId, []);
+        if (bank.length < TEST_TOTAL_QUESTIONS) 
+        {
+            alert("Kho câu hỏi chưa đủ 30 câu.");
+            return false;
         }
 
-        groups.get(q.radicalId).push(q);
-      });
+        const mastered = getMasteredCount(read(STORAGE.progress, {}));
+        const level = getLevel(mastered);
+        const maxRadicalId = Math.ceil(danhSachBoThu.length * level / 4);
+        const levelBank = bank.filter(q => q.boThuId <= maxRadicalId);
 
-      const selected = [];
+        const selectQuestions = (pool, count, excluded = new Set()) => 
+        {
+            const groups = new Map();
+            pool.filter(q => !excluded.has(q)).forEach(q => {
+                    if (!groups.has(q.boThuId)) {
+                    groups.set(q.boThuId, []);
+                }
+                groups.get(q.boThuId).push(q);
+            });
 
-      shuffle([...groups.values()]).forEach(group => {
-        if (selected.length < count) {
-          selected.push(shuffle(group)[0]);
-        }
-      });
+            const selected = [];
+            xaoTron([...groups.values()]).forEach(group => {
+                if (selected.length < count) 
+                {
+                    selected.push(xaoTron(group)[0]);
+                }
+            });
 
-      if (selected.length < count) {
-        const used = new Set([...excluded, ...selected]);
+            if (selected.length < count) {
+                const used = new Set([...excluded, ...selected]);
+                selected.push(
+                ...xaoTron(pool.filter(q => !used.has(q)))
+                    .slice(0, count - selected.length)
+                );
+            }
+
+            return selected;
+        };
+
+        const selected = selectQuestions(levelBank, TEST_QUESTIONS_IN_LEVEL);
         selected.push(
-          ...shuffle(pool.filter(q => !used.has(q)))
-            .slice(0, count - selected.length)
+        ...selectQuestions(
+            bank,
+            TEST_TOTAL_QUESTIONS - TEST_QUESTIONS_IN_LEVEL,
+            new Set(selected)
+        )
         );
-      }
 
-      return selected;
-    };
+        test_danhSachCauHoi = xaoTron(
+            selected.slice(0, TEST_TOTAL_QUESTIONS)
+        );
 
-    const selected = selectQuestions(levelBank, LEVEL_QUESTIONS);
-    selected.push(
-      ...selectQuestions(
-        bank,
-        TOTAL_QUESTIONS - LEVEL_QUESTIONS,
-        new Set(selected)
-      )
-    );
+        answers = Array(TEST_TOTAL_QUESTIONS).fill(null);
+        current = 0;
+        remaining = TEST_TOTAL_TIME;
 
-    questions = shuffle(
-      selected.slice(0, TOTAL_QUESTIONS)
-    );
-
-    answers = Array(TOTAL_QUESTIONS).fill(null);
-    current = 0;
-    remaining = TOTAL_TIME;
-
-    return true;
-  }
+        return true;
+    }
 
   // =========================
   // 4. MÀN HÌNH LÀM BÀI
@@ -361,140 +364,138 @@ const RadicalTest = (() =>
 
   function start() {
     if (!buildTest()) return;
-
     started = true;
-    renderQuestion();
-
+    test_renderCauHoi();
     clearInterval(timer);
-
     timer = setInterval(() => {
-      remaining--;
+        remaining--;
+        const clock = root.querySelector("[data-clock]");
+        if (clock) 
+            {
+            clock.textContent = formatTime(remaining);
 
-      const clock = root.querySelector("[data-clock]");
-
-      if (clock) {
-        clock.textContent = formatTime(remaining);
-
-        if (remaining <= 60) {
-          clock.style.color = "#dc2626";
+            if (remaining <= 60) {
+            clock.style.color = "#dc2626";
+            }
         }
-      }
 
-      if (remaining <= 0) {
-        finish(true);
-      }
+        if (remaining <= 0) {
+            finish(true);
+        }
     }, 1000);
   }
 
-  function saveAnswer() {
-    const selected = root.querySelector(
-      'input[name="radical-answer"]:checked'
-    );
+    function saveAnswer() 
+    {
+        const selected = root.querySelector(
+        'input[name="boThu-answer"]:checked'
+        );
 
-    answers[current] = selected
-      ? Number(selected.value)
-      : null;
-  }
+        answers[current] = selected
+        ? Number(selected.value)
+        : null;
+    }
 
-  function renderQuestion() {
-    const q = questions[current];
+    function test_renderCauHoi() 
+    {
+        const q = test_danhSachCauHoi[current];
 
-    root.innerHTML = `        
-      <div class="test-card">
+        root.innerHTML = `        
+        <div class="test-card">
 
-        <div style="
-          display:flex;
-          justify-content:space-between;
-          gap:12px
-        ">
-          <strong>Câu ${current + 1}/${TOTAL_QUESTIONS}</strong>
-          <strong data-clock>${formatTime(remaining)}</strong>
-        </div>
+            <div style="
+            display:flex;
+            justify-content:space-between;
+            gap:12px
+            ">
+            <strong>Câu ${current + 1}/${TEST_TOTAL_QUESTIONS}</strong>
+            <strong data-clock>${formatTime(remaining)}</strong>
+            </div>
 
-        <div class="test-progress">
-          <div style="
-            width:${(current + 1) / TOTAL_QUESTIONS * 100}%
-          "></div>
-        </div>
+            <div class="test-progress">
+            <div style="
+                width:${(current + 1) / TEST_TOTAL_QUESTIONS * 100}%
+            "></div>
+            </div>
 
-        <div class="test-question">
-          ${esc(q.title)}
-          <div class="test-chinese">${formatSubtitle(q.subtitle)}</div>
-        </div>
+            <div class="test-question">
+            ${esc(q.title)}
+            <div class="test-chinese">${formatSubtitle(q.subTitle)}</div>
+            </div>
 
-        <div class="test-options">
-          ${q.options.map((option, i) => `
-            <label class="test-option">
-              <input
-                type="radio"
-                name="radical-answer"
-                value="${i}"
-                ${answers[current] === i ? "checked" : ""}
-              >
-              <span>
-                ${String.fromCharCode(65 + i)}. ${esc(option)}
-              </span>
-            </label>
-          `).join("")}
-        </div>
-
-        <div style="display:flex;gap:8px;margin-top:18px">
-
-          <button
-            class="test-btn test-btn-secondary"
-            id="test-prev"
-            ${current === 0 ? "disabled" : ""}
-          >
-            ← Lùi
-          </button>
-
-          <button
-            class="test-btn"
-            id="test-next"
-            style="flex:1"
-          >
-            ${current === TOTAL_QUESTIONS - 1
-              ? "Nộp bài"
-              : "Tiếp →"}
-          </button>
-            <button
-                class="test-btn" id="testing-boQua"
-                style="width:28%; background: #999"
+            <div class="test-options">
+            ${q.options.map((option, i) => `
+                <label class="test-option">
+                <input
+                    type="radio"
+                    name="boThu-answer"
+                    value="${i}"
+                    ${answers[current] === i ? "checked" : ""}
                 >
-                Bỏ qua
+                <span>
+                    ${String.fromCharCode(65 + i)}. ${esc(option)}
+                </span>
+                </label>
+            `).join("")}
+            </div>
+
+            <div style="display:flex;gap:8px;margin-top:18px">
+
+            <button
+                class="test-btn test-btn-secondary"
+                id="test-prev"
+                ${current === 0 ? "disabled" : ""}
+            >
+                ← Lùi
             </button>
 
+            <button
+                class="test-btn"
+                id="test-next"
+                style="flex:1"
+            >
+                ${current === TEST_TOTAL_QUESTIONS - 1
+                ? "Nộp bài"
+                : "Tiếp →"}
+            </button>
+                <button
+                    class="test-btn" id="testing-boQua"
+                    style="width:28%; background: #999"
+                    >
+                    Bỏ qua
+                </button>
+
+            </div>
+
         </div>
+        `;
 
-      </div>
-    `;
+        root.querySelector("#test-prev").onclick = () => {
+        saveAnswer();
 
-    root.querySelector("#test-prev").onclick = () => {
-      saveAnswer();
+        if (current > 0) {
+            current--;
+            test_renderCauHoi();
+        }
+        };
 
-      if (current > 0) {
-        current--;
-        renderQuestion();
-      }
-    };
+        root.querySelector("#test-next").onclick = () => {
+        saveAnswer();
 
-    root.querySelector("#test-next").onclick = () => {
-      saveAnswer();
+        if (current < TEST_TOTAL_QUESTIONS - 1) {
+            current++;
+            test_renderCauHoi();
+        } else {
+            finish(false);
+        }
+        };
 
-      if (current < TOTAL_QUESTIONS - 1) {
-        current++;
-        renderQuestion();
-      } else {
-        finish(false);
-      }
-    };
-
-    root.querySelector("#testing-boQua").onclick = () => {
-        renderHome(); // Dừng timer và đưa nội dung bài test về giao diện home
-        document.getElementById("menuScreen").style.display = "block";
-        root.style.display = "none";
-    };
-  }
+        root.querySelector("#testing-boQua").onclick = () => {
+            renderHome(); // Dừng timer và đưa nội dung bài test về giao diện home
+            document.getElementById("menuScreen").style.display = "block";
+            root.style.display = "none";
+        };
+    }
 
   // =========================
   // 5. CHẤM ĐIỂM
@@ -510,7 +511,7 @@ const RadicalTest = (() =>
 
     let score = 0;
 
-    questions.forEach((q, i) => {
+    test_danhSachCauHoi.forEach((q, i) => {
       if (
         answers[i] !== null &&
         q.options[answers[i]] === q.answer
@@ -522,9 +523,9 @@ const RadicalTest = (() =>
     const result = {
       date: new Date().toISOString(),
       score,
-      total: TOTAL_QUESTIONS,
-      percent: Math.round(score / TOTAL_QUESTIONS * 100),
-      timeUsed: TOTAL_TIME - remaining,
+      total: TEST_TOTAL_QUESTIONS,
+      percent: Math.round(score / TEST_TOTAL_QUESTIONS * 100),
+      timeUsed: TEST_TOTAL_TIME - remaining,
       timeUp
     };
 
@@ -540,7 +541,7 @@ const RadicalTest = (() =>
 
         <div class="test-stats">
           <div class="test-stat">
-            <strong>${score}/${TOTAL_QUESTIONS}</strong>
+            <strong>${score}/${TEST_TOTAL_QUESTIONS}</strong>
             <span class="test-muted">Câu đúng</span>
           </div>
 
@@ -586,8 +587,8 @@ const RadicalTest = (() =>
   function updateProgress() {
     const progress = read(STORAGE.progress, {});
 
-    questions.forEach((q, i) => {
-      const key = String(q.radicalId);
+    test_danhSachCauHoi.forEach((q, i) => {
+      const key = String(q.boThuId);
 
       if (!progress[key]) {
         progress[key] = {
@@ -618,7 +619,7 @@ const RadicalTest = (() =>
       <div class="test-card" style="height: 100%; display: grid; grid-template-rows: 60px 1fr 60px;">
             <div class="test-title">Xem lại đáp án</div>
             <div style="overflow: scroll;">
-                ${questions.map((q, i) => {
+                ${test_danhSachCauHoi.map((q, i) => {
                 const selected = answers[i];
                 const correct = selected !== null && q.options[selected] === q.answer;
 
@@ -629,7 +630,7 @@ const RadicalTest = (() =>
                     ">
                         <strong>${i + 1}. ${esc(q.title)}</strong>
                         <div class="test-muted">
-                            ${formatSubtitle(q.subtitle)}
+                            ${formatSubtitle(q.subTitle)}
                         </div>
                         <p class="${correct ? "test-correct" : "test-wrong"}">
                             ${correct ? "✓ Chính xác" : "✗ Chưa chính xác"}
@@ -647,8 +648,8 @@ const RadicalTest = (() =>
                             <strong>${esc(q.answer)}</strong>
                         </p>
                         <p class="test-muted">
-                            Bộ thủ ${esc(q.radicalChar)} ·
-                            ${q.radicalId}/214
+                            Bộ thủ ${esc(q.hanTu)} ·
+                            ${q.boThuId}/214
                         </p>
                     </div>
                 `;
@@ -757,25 +758,26 @@ const RadicalTest = (() =>
   // 9. KHỞI TẠO
   // =========================
 
-  function init() {
-    if (!Array.isArray(radicals) || radicals.length === 0) {
-      root.innerHTML = `
-        <div class="test-card">
-          Chưa có dữ liệu bộ thủ.
-        </div>
-      `;
-
-      return;
-    }
-
-    renderHome();
+  function init() 
+  {
+        if (!Array.isArray(danhSachBoThu) || danhSachBoThu.length === 0) 
+        {
+            root.innerHTML = `
+                <div class="test-card">
+                Chưa có dữ liệu bộ thủ.
+                </div>
+            `;
+            return;
+        }
+        renderHome();
   }
 
   return {
     init,
     renderHome,
-    buildBank
+    test_buildNganHangCauHoi
   };
+  
 })();
 
-RadicalTest.init();
+BaiKiemTraBoThu.init();
