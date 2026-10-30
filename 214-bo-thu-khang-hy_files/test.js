@@ -1,254 +1,286 @@
-const RadicalTest = (() => {
-  const root = document.getElementById("test");
+const RadicalTest = (() => 
+{
+    const root = document.getElementById("test");
 
-  if (!root) return { init() {} };
+    if (!root) return { init() {} };
 
-  const STORAGE = {
-    history: "radical_test_history",
-    progress: "radical_test_progress"
-  };
-
-  const TOTAL_QUESTIONS = 30;
-  const LEVEL_QUESTIONS = Math.floor(TOTAL_QUESTIONS * 0.9);
-  const TOTAL_TIME = 30 * 60;
-
-  let bank = [];
-  let questions = [];
-  let answers = [];
-  let current = 0;
-  let remaining = TOTAL_TIME;
-  let timer = null;
-  let started = false;
-
-  // =========================
-  // 1. TIỆN ÍCH
-  // =========================
-
-  function esc(value) {
-    return String(value ?? "").replace(/[&<>"']/g, c => ({
-      "&": "&amp;",
-      "<": "&lt;",
-      ">": "&gt;",
-      '"': "&quot;",
-      "'": "&#39;"
-    })[c]);
-  }
-
-  function read(key, fallback) {
-    try {
-      return JSON.parse(localStorage.getItem(key)) ?? fallback;
-    } catch {
-      return fallback;
-    }
-  }
-
-  function save(key, value) {
-    try {
-      localStorage.setItem(key, JSON.stringify(value));
-    } catch (error) {
-      console.warn("Không lưu được dữ liệu test:", error);
-    }
-  }
-
-  function shuffle(array) {
-    const result = [...array];
-
-    for (let i = result.length - 1; i > 0; i--) {
-      const j = Math.floor(Math.random() * (i + 1));
-      [result[i], result[j]] = [result[j], result[i]];
-    }
-
-    return result;
-  }
-
-  function formatTime(seconds) {
-    seconds = Math.max(0, seconds);
-
-    const m = Math.floor(seconds / 60);
-    const s = seconds % 60;
-
-    return `${String(m).padStart(2, "0")}:${String(s).padStart(2, "0")}`;
-  }
-
-  // =========================
-  // 2. TẠO CÂU HỎI
-  // =========================
-
-  function makeQuestion(radical, type, title, subtitle, field) {
-    const correct = radical[field];
-
-    if (correct === undefined || correct === null || correct === "") {
-      return null;
-    }
-
-    // Tạo tập đáp án sai, không trùng đáp án đúng.
-    const wrong = [
-      ...new Set(
-        radicals
-          .filter(r => r.id !== radical.id)
-          .map(r => String(r[field] ?? ""))
-          .filter(value =>
-            value !== "" &&
-            value !== String(correct)
-          )
-      )
-    ];
-
-    if (wrong.length < 3) return null;
-
-    const options = shuffle([
-      String(correct),
-      ...shuffle(wrong).slice(0, 3)
-    ]);
-
-    return {
-      radicalId: radical.id,
-      radicalChar: radical.char,
-      type,
-      title,
-      subtitle,
-      answer: String(correct),
-      options
+    const STORAGE = 
+    {
+        history: "radical_test_history",
+        progress: "radical_test_progress"
     };
-  }
 
-  // Câu hỏi mở rộng dựa trên ví dụ trong dữ liệu.
-  function makeExampleQuestion(radical, example, index) {
-    const [chars, pinyin, meaning] = example;
+    const TOTAL_QUESTIONS = 30;
+    const LEVEL_QUESTIONS = Math.floor(TOTAL_QUESTIONS * 0.9);
+    const TOTAL_TIME = 30 * 60;
 
-    if (!chars || !pinyin || !meaning) return [];
+    let bank = [];
+    let questions = [];
+    let answers = [];
+    let current = 0;
+    let remaining = TOTAL_TIME;
+    let timer = null;
+    let started = false;
 
-    const result = [];
+    // =========================
+    // 1. TIỆN ÍCH
+    // =========================
 
-    const pinyinOptions = [
-      ...new Set(
-        radicals.map(r => r.pinyin).filter(
-          value => value && value !== pinyin
-        )
-      )
-    ];
-
-    if (pinyinOptions.length >= 3) {
-      result.push({
-        radicalId: radical.id,
-        radicalChar: radical.char,
-        type: "examplePinyin",
-        title: `Phiên âm của chữ "${chars}" là gì?`,
-        subtitle: `这个字“${chars}”的拼音是什么？`,
-        answer: pinyin,
-        options: shuffle([
-          pinyin,
-          ...shuffle(pinyinOptions).slice(0, 3)
-        ])
-      });
+    function esc(value) 
+    {
+        return String(value ?? "").replace(/[&<>"']/g, c => ({
+        "&": "&amp;",
+        "<": "&lt;",
+        ">": "&gt;",
+        '"': "&quot;",
+        "'": "&#39;"
+        })[c]);
     }
 
-    const meaningOptions = [
-      ...new Set(
-        radicals.map(r => r.meaning).filter(
-          value => value && value !== meaning
-        )
-      )
-    ];
-
-    if (meaningOptions.length >= 3) {
-      result.push({
-        radicalId: radical.id,
-        radicalChar: radical.char,
-        type: "exampleMeaning",
-        title: `Chữ "${chars}" có nghĩa là gì?`,
-        subtitle: `“${chars}”是什么意思？`,
-        answer: meaning,
-        options: shuffle([
-          meaning,
-          ...shuffle(meaningOptions).slice(0, 3)
-        ])
-      });
+    function formatSubtitle(value)
+    {
+        return String(value ?? "").split("<br>").map(esc).join("<br>");
     }
 
-    return result;
-  }
+    function addSupplementaryInfo(subtitle, radical, type)
+    {
+        const askedField = {
+            hanviet: "hanviet",
+            pinyin: "pinyin",
+            meaning: "meaning",
+            strokes: "strokes",
+            id: "id"
+        }[type];
+        const info = [];
 
-  function buildBank() {
-    const result = [];
+        if (askedField !== "hanviet") info.push(`Âm Hán Việt: ${radical.hanviet}`);
+        if (askedField !== "pinyin") info.push(`Pinyin: ${radical.pinyin}`);
+        if (askedField !== "meaning") info.push(`Nghĩa: ${radical.meaning}`);
+        if (askedField !== "strokes") info.push(`${radical.strokes} nét`);
+        if (askedField !== "id") info.push(`số ${radical.id}/214`);
 
-    radicals.forEach(r => {
-      const add = q => {
-        if (q) result.push(q);
-      };
+        return `${subtitle}<br>${info.join(" · ")}`;
+    }
 
-      add(makeQuestion(
-        r,
-        "hanviet",
-        `Âm Hán Việt của bộ thủ "${r.char}" là gì?`,
-        `部首“${r.char}”的汉越音是什么？`,
-        "hanviet"
-      ));
+    
+    function read(key, fallback) 
+    {
+        try 
+        {
+            return JSON.parse(localStorage.getItem(key)) ?? fallback;
+        } 
+        catch 
+        {
+            return fallback;
+        }
+    }
 
-      add(makeQuestion(
-        r,
-        "pinyin",
-        `Phiên âm Pinyin của "${r.char}" là gì?`,
-        `部首“${r.char}”的拼音是什么？`,
-        "pinyin"
-      ));
+    function save(key, value) 
+    {
+        try {
+        localStorage.setItem(key, JSON.stringify(value));
+        } catch (error) {
+        console.warn("Không lưu được dữ liệu test:", error);
+        }
+    }
 
-      add(makeQuestion(
-        r,
-        "meaning",
-        `Bộ thủ "${r.char}" có nghĩa là gì?`,
-        `部首“${r.char}”是什么意思？`,
-        "meaning"
-      ));
 
-      add(makeQuestion(
-        r,
-        "strokes",
-        `Bộ thủ "${r.char}" có mấy nét?`,
-        `部首“${r.char}”有几画？`,
-        "strokes"
-      ));
+    function shuffle(array) 
+    {
+        const result = [...array];
 
-      add(makeQuestion(
-        r,
-        "id",
-        `Số thứ tự của "${r.char}" trong bảng Khang Hy là?`,
-        `“${r.char}”在康熙部首表中排第几？`,
-        "id"
-      ));
+        for (let i = result.length - 1; i > 0; i--) {
+        const j = Math.floor(Math.random() * (i + 1));
+        [result[i], result[j]] = [result[j], result[i]];
+        }
 
-      // Thêm câu hỏi về chữ ví dụ đã có.
-      const examples =
-        details[r.char]?.examples ||
-        exactExamples[r.char] ||
-        [];
+        return result;
+    }
 
-      examples.forEach(example => {
-        result.push(...makeExampleQuestion(r, example));
-      });
-    });
+    function formatTime(seconds) 
+    {
+            seconds = Math.max(0, seconds);
+            const m = Math.floor(seconds / 60);
+            const s = seconds % 60;
+            return `${String(m).padStart(2, "0")}:${String(s).padStart(2, "0")}`;
+    }
 
-    return result;
-  }
+    // =========================
+    // 2. TẠO CÂU HỎI
+    // =========================
+    function makeQuestion(radical, type, title, subtitle, field) 
+    {
+        const correct = radical[field];
+        if (correct === undefined || correct === null || correct === "") 
+        {
+            return null;
+        }
 
-  function getMasteredCount(progress) {
-    return radicals.filter(r => {
-      const p = progress[String(r.id)];
+        // Tạo tập đáp án sai, không trùng đáp án đúng.
+        const wrong = 
+        [...new Set(
+            radicals
+            .filter(r => r.id !== radical.id)
+            .map(r => String(r[field] ?? ""))
+            .filter(value =>
+                value !== "" &&
+                value !== String(correct)
+            )
+        )];
 
-      return p &&
-        p.attempts >= 3 &&
-        p.correct >= 3 &&
-        p.correct / p.attempts >= 0.8;
-    }).length;
-  }
+        if (wrong.length < 3) return null;
+        
+        const options = shuffle([
+            String(correct),
+            ...shuffle(wrong).slice(0, 3)
+        ]);
 
-  function getLevel(mastered) {
-    const percent = mastered / radicals.length * 100;
-    return percent > 75 ? 4
-        : percent > 50 ? 3
-        : percent > 25 ? 2
-        : 1;
-  }
+        return {
+            radicalId: radical.id,
+            radicalChar: radical.char,
+            type,
+            title,
+            subtitle: addSupplementaryInfo(subtitle, radical, type),
+            answer: String(correct),
+            options
+        };
+    }
+
+    // Câu hỏi mở rộng dựa trên ví dụ trong dữ liệu.
+    function makeExampleQuestion(radical, example, index) 
+    {
+        const [chars, pinyin, meaning] = example;
+        if (!chars || !pinyin || !meaning) return [];
+        const result = [];
+
+        const pinyinOptions = [
+        ...new Set(
+            radicals.map(r => r.pinyin).filter(
+            value => value && value !== pinyin
+            )
+        )
+        ];
+
+        if (pinyinOptions.length >= 3) {
+        result.push({
+            radicalId: radical.id,
+            radicalChar: radical.char,
+            type: "examplePinyin",
+            title: `Phiên âm của chữ "${chars}" là gì?`,
+            subtitle: addSupplementaryInfo(`这个字“${chars}”的拼音是什么？`, radical, "example"),
+            answer: pinyin,
+            options: shuffle([
+            pinyin,
+            ...shuffle(pinyinOptions).slice(0, 3)
+            ])
+        });
+        }
+
+        const meaningOptions = [
+        ...new Set(
+            radicals.map(r => r.meaning).filter(
+            value => value && value !== meaning
+            )
+        )
+        ];
+
+        if (meaningOptions.length >= 3) 
+        {
+            result.push({
+                radicalId: radical.id,
+                radicalChar: radical.char,
+                type: "exampleMeaning",
+                title: `Chữ "${chars}" có nghĩa là gì?`,
+                subtitle: addSupplementaryInfo(`“${chars}”是什么意思？`, radical, "example"),
+                answer: meaning,
+                options: shuffle([
+                meaning,
+                ...shuffle(meaningOptions).slice(0, 3)
+                ])
+            });
+        }
+        return result;
+    }
+
+    function buildBank() 
+    {
+        const result = [];
+        radicals.forEach(r => 
+        {
+            const add = q => {
+                if (q) result.push(q);
+            };
+
+            add(makeQuestion(
+                r,
+                "hanviet",
+                `Âm Hán Việt của bộ thủ "${r.char}" là gì?`,
+                `部首“${r.char}”的汉越音是什么？`,
+                "hanviet"
+            ));
+
+            add(makeQuestion(
+                r,
+                "pinyin",
+                `Phiên âm Pinyin của bộ thủ "${r.char}" là gì?`,
+                `部首“${r.char}”的拼音是什么？`,
+                "pinyin"
+            ));
+
+            add(makeQuestion(
+                r,
+                "meaning",
+                `Bộ thủ "${r.char}" có nghĩa là gì?`,
+                `部首“${r.char}”是什么意思？`,
+                "meaning"
+            ));
+
+            add(makeQuestion(
+                r,
+                "strokes",
+                `Số nét của bộ thủ "${r.char}" là bao nhiêu?`,
+                `部首“${r.char}”有几画？`,
+                "strokes"
+            ));
+
+            add(makeQuestion(
+                r,
+                "id",
+                `Vị trí của bộ thủ "${r.char}" trong bảng Khang Hy là số mấy?`,
+                `“${r.char}”在康熙部首表中排第几？`,
+                "id"
+            ));
+
+            // Thêm câu hỏi về chữ ví dụ đã có.
+            const examples = details[r.char]?.examples || exactExamples[r.char] || [];
+
+            examples.forEach(example => 
+            {
+                result.push(...makeExampleQuestion(r, example));
+            });
+        });
+        return result;
+    }
+
+
+    function getMasteredCount(progress) {
+        return radicals.filter(r => {
+        const p = progress[String(r.id)];
+
+        return p &&
+            p.attempts >= 3 &&
+            p.correct >= 3 &&
+            p.correct / p.attempts >= 0.8;
+        }).length;
+    }
+
+    function getLevel(mastered) {
+        const percent = mastered / radicals.length * 100;
+        return percent > 75 ? 4
+            : percent > 50 ? 3
+            : percent > 25 ? 2
+            : 1;
+    }
 
   // =========================
   // 3. CHỌN 30 CÂU
@@ -381,7 +413,7 @@ const RadicalTest = (() => {
 
         <div class="test-question">
           ${esc(q.title)}
-          <div class="test-chinese">${esc(q.subtitle)}</div>
+          <div class="test-chinese">${formatSubtitle(q.subtitle)}</div>
         </div>
 
         <div class="test-options">
@@ -427,10 +459,6 @@ const RadicalTest = (() => {
             </button>
 
         </div>
-
-        <p class="test-muted">
-          Bộ thủ ${esc(q.radicalChar)} · Số ${q.radicalId}/214
-        </p>
 
       </div>
     `;
@@ -595,7 +623,7 @@ const RadicalTest = (() => {
                     ">
                         <strong>${i + 1}. ${esc(q.title)}</strong>
                         <div class="test-muted">
-                            ${esc(q.subtitle)}
+                            ${formatSubtitle(q.subtitle)}
                         </div>
                         <p class="${correct ? "test-correct" : "test-wrong"}">
                             ${correct ? "✓ Chính xác" : "✗ Chưa chính xác"}
