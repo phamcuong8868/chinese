@@ -53,13 +53,19 @@ const RadicalTest = (() =>
         }[type];
         const info = [];
 
-        if (askedField !== "hanviet") info.push(`Âm Hán Việt: ${radical.hanviet}`);
-        if (askedField !== "pinyin") info.push(`Pinyin: ${radical.pinyin}`);
-        if (askedField !== "meaning") info.push(`Nghĩa: ${radical.meaning}`);
-        if (askedField !== "strokes") info.push(`${radical.strokes} nét`);
-        if (askedField !== "id") info.push(`số ${radical.id}/214`);
+        const readings = [];
+        if (askedField !== "hanviet" && radical.hanviet) readings.push(radical.hanviet);
+        if (askedField !== "pinyin" && radical.pinyin) readings.push(radical.pinyin);
+        if (readings.length) {
+            const reading = readings.length === 2
+                ? `${readings[0]} (${readings[1]})`
+                : readings[0];
+            info.push(reading);
+        }
+        if (askedField !== "meaning" && radical.meaning) info.push(radical.meaning);
+        if (askedField !== "id") info.push(`${radical.id}/214`);
 
-        return `${subtitle}<br>${info.join(" · ")}`;
+        return `${subtitle}<br>${info.join(" - ")}`;
     }
 
     
